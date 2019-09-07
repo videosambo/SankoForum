@@ -56,3 +56,4 @@ SankoForum is silly forum engine that is fully open source.
     - post_topic
     - post_by
   
+  [How to create database?](https://github.com/videosambo/SankoForum/blob/master/sankoforum.sql)
