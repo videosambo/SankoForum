@@ -1,0 +1,193 @@
+body {
+    background-color: #4E4E4E;
+    text-align: center;
+ }
+
+
+#wrapper {
+    width: 60%;
+    margin: 0 auto;
+}
+ 
+#container {
+    border: 1px solid #000;
+    border-top: none;
+    float: left;
+    font-family: Arial;
+    padding: 20px 30px;
+    text-align: left;
+    width: 100%;
+    background-color: #BFBFBF;
+    margin: auto;
+}
+ 
+#menu {
+    float: left;
+    border: 1px solid #303030;
+    border-radius: 5px;
+    clear: both;
+    width:100%;
+    height:20px;
+    padding: 0 30px;
+    padding-bottom: 10px;
+    background-color: #FFF;
+    text-align: left;
+    font-size: 85%;
+}
+ 
+#menu a:hover {
+    background-color: #009FC1;
+    padding-top: 10px;
+}
+ 
+#userbar {
+    background-color: #fff;
+    float: right;
+    width: 250px;
+}
+ 
+#footer {
+    clear: both;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+ 
+table a {
+    color: #000;
+}
+ 
+table a:hover {
+    color: #373737;
+    text-decoration: none;
+}
+ 
+th {
+    background-color: #3266a8;
+    color: #F0F0F0;
+}
+ 
+td {
+    padding: 5px;
+}
+ 
+h1, #footer {
+    font-family: Arial;
+    color: #F1F3F1;
+}
+
+h2 {
+    font-family: Arial;
+    color: #F1F3F1;
+}
+ 
+h3 {margin: 0; padding: 0;}
+ 
+.item {
+    background-color: #00728B;
+    border: 1px solid #032472;
+    border-radius: 5px;
+    color: #FFF;
+    font-family: Arial;
+    padding: 3px;
+    padding-top: 5px;
+    text-decoration: none;
+}
+ 
+.leftpart {
+    width: 70%;
+}
+ 
+.rightpart {
+    width: 30%;
+}
+ 
+.small {
+    font-size: 75%;
+    color: #373737;
+}
+#footer {
+    font-size: 65%;
+    padding: 3px 0 0 0;
+}
+ 
+.topic-post {
+    height: 100px;
+}
+ 
+.post-content {
+    padding: 30px;
+}
+ 
+textarea {
+    width: 500px;
+    height: 200px;
+}
+
+.alert {
+    width: 500px;
+    margin: 8px auto;
+    padding: 20px;
+    background: #ff2b2b;
+    border-left: 10px solid red;
+    border-radius: 5px;
+}
+
+.info {
+    width: 500px;
+    margin: 8px auto;
+    padding: 20px;
+    background: #66ff4f;
+    border-left: 10px solid green;
+    border-radius: 5px;
+}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+
+.section {
+    background-color: #fff;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.content {
+    background-color: #fff;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+#sections {
+    padding: 5px;
+}
+
+.label {
+    color: black;
+}
+
+#notifications {
+	font-family: Arial;
+	pointer-events:all;
+	position: absolute;
+	top: 5%;
+	right: 10%;
+	width: 30%;
+	height: 80%;
+}
