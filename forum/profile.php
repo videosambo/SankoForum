@@ -1,7 +1,7 @@
 <?php
 include "connect.php";
 include "header.php";
-
+include 'func.php';
 //Tarkistetaan onko kirjautunu sisälle
 if($_SESSION['signed_in'] == true) {
 	//Tarkistetaan onko id määritetty parametreissa
@@ -23,6 +23,8 @@ if($_SESSION['signed_in'] == true) {
 				if(mysqli_num_rows($result)) {
 					echo '<div class="content">';
 					while ($row = mysqli_fetch_assoc($result)) {
+
+						echo "<img src=\"" . avatar($row["user_email"]) ."\">";
 						echo '<h4>Nimi:</h4>'.$row['user_name'].'<br>';
 						echo '<h4>Päivämäärä jolloin luotu:</h4>'.$row['user_date'].'<br>';
 					}
@@ -48,6 +50,7 @@ if($_SESSION['signed_in'] == true) {
 			} else {
 				echo '<div class="content">';
 				while ($row = mysqli_fetch_assoc($result)) {
+					echo "<img src=\"" . avatar($row["user_email"]) ."\">";
 					echo '<h4>Nimi:</h4>'.$row['user_name'].'<br>';
 					echo '<h4>Päivämäärä jolloin luotu:</h4>'.$row['user_date'].'<br>';
 					echo '<h4>Sähköposti:</h4>'.$row['user_email'].'<br>';
@@ -74,6 +77,7 @@ if($_SESSION['signed_in'] == true) {
 				if(mysqli_num_rows($result)) {
 					echo '<div class="content">';
 					while ($row = mysqli_fetch_assoc($result)) {
+						echo "<img src=\"" . avatar($row["user_email"]) ."\">";
 						echo '<h4>Nimi:</h4>'.$row['user_name'].'<br>';
 						echo '<h4>Päivämäärä jolloin luotu:</h4>'.$row['user_date'].'<br>';
 					}
