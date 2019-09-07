@@ -87,7 +87,7 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 		array_push($_SESSION['alert'], "Sähköposti kenttä ei saa olla tyhjä.");
 	}
 
-	//RecatchaV2
+	RecatchaV2
 	if(isset($_POST['g-recaptcha-response']) && !empty($_POST['g-recaptcha-response'])) {
 		$secret = '6LdL6pYUAAAAABQiDEZJlKwyLtyyOut36xnhC7PT';
         $verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$_POST['g-recaptcha-response']);
@@ -120,11 +120,18 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 			echo lang("sqlError");
 		} else {
 			//Syötetään arvot
-			mysqli_stmt_bind_param($stmt, "ssss", $_POST['user_name'], $password, $_POST['user_email'], randString());
+			$emailKey = randString();
+			mysqli_stmt_bind_param($stmt, "ssss", $_POST['user_name'], $password, $_POST['user_email'], $emailKey);
 			//Suoritetaan quary
 			mysqli_stmt_execute($stmt);
-			echo 'Onnistuneesti luotu käyttäjä! Nyt voit <a href="signin.php">kirjautua</a> ja alkaa postailemaan';
-			array_push($_SESSION['notification'], "Onnistuneesti luotu käyttäjä! Nyt voit <a href=\"signin.php\">kirjautua</a> ja alkaa postailemaan.");
+			//Sähköposti
+			$subject = "Email verification";
+			$message = "<a href='http://localhost/sankoforum/verify.php?key=".$emailKey."'>Klikkaa tästä</a> vahvistaaksesi sähköpostisi";
+
+			mail($_POST['user_email'], $subject, $message);
+
+			echo 'Onnistuneesti luotu käyttäjä! Vahvista sähköpostisi niin voit <a href="signin.php">kirjautua</a> ja alkaa postailemaan';
+			array_push($_SESSION['notification'], "Onnistuneesti luotu käyttäjä! Vahvista sähköpostisi niin voit <a href=\"signin.php\">kirjautua</a> ja alkaa postailemaan.");
 			header("Location: index.php", true, 301);
 			exit();
 		}
