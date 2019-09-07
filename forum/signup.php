@@ -112,7 +112,7 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 		];
 		$password = password_hash($_POST['user_pass'], PASSWORD_BCRYPT, $options);
 		//Nyt tungetaan kaikki mysliin, ensi tehdään prepared lauseke jotta vältytää injectioilta
-		$sql = "INSERT INTO users (user_name, user_pass, user_email, email_token, email_verified, user_date, user_level) VALUES (?, ?, ?, ?, 'false', NOW(), '0')";
+		$sql = "INSERT INTO users (user_name, user_pass, user_email, email_token, email_verified, user_date, user_level) VALUES (?, ?, ?, ?, 0, NOW(), '0')";
 		//Määritetään yhteys
 		$stmt = mysqli_stmt_init($conn);
 		if (!mysqli_stmt_prepare($stmt, $sql)) {
