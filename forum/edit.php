@@ -7,8 +7,7 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 	//Jos tullaan normisti niin tarkistetaan onko käyttäjä online
 	if(!$_SESSION['signed_in']) {
 		//Jos ei ole kirjautunut niin heitetään se pois
-		echo 'Sinun pitää kirjautua sisään jotta voit muokata sisältöä!';
-		array_push($_SESSION['alert'], "Sinun pitää kirjautua sisään jotta voit muokata sisältöä!");
+		array_push($_SESSION['alert'], lang("errorNeedToSignInToEditContent"));
 		header("Location: index.php", true, 301);
 		exit();
 	} else {

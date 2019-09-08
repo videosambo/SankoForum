@@ -47,7 +47,7 @@ function displayNotifications() {
 	//	$_SESSION['alert'] = array();
 	//}
 }
-
+include "config.php";
 include "lang.php";
 session_start();
 if(!isset($_SESSION['signed_in'])) $_SESSION['signed_in'] = false;

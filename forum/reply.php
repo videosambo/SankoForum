@@ -8,6 +8,11 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
     header("Location: index.php", true, 301);
     exit();
 } else {
+    if($_SESSION['user_vertification'] == 0) {
+        array_push($_SESSION['alert'], "Sinun pitää vahvistaa sähköpostisi jotta voit luoda aiheita");
+        header("Location: index.php", true, 301);
+        exit();
+    }
     //Tarkistetaan onko käyttäjä kirjautunut sisälle
 	if(!$_SESSION['signed_in']){
         array_push($_SESSION['alert'], "Sinun pitää olla kirjautunut vastataksesi tähän viestiketjuun!");

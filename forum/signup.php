@@ -18,7 +18,7 @@ function makeForm() {
 		Salasana: <input type="password" name="user_pass"> <br>
 		Vahvista salasana: <input type="password" name="user_pass_check"> <br>
 		Sähköposti: <input type="email" name="user_email"> <br>
-		<div class="g-recaptcha" data-sitekey="6LdL6pYUAAAAAGo_9RvDqCzIZpPZ24XoUd8Eyzku"></div>
+		<div class="g-recaptcha" data-sitekey="'.getValue("recaptchaPublic").'"></div>
 		<input type="submit" value="Luo" />
 		</form>';
 }
@@ -93,7 +93,7 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 	//RecatchaV2
 	$recaptcha_response = $_POST['g-recaptcha-response'];
 	if(strlen($recaptcha_response) != 0 && !empty($recaptcha_response)) {
-		$secret = '6LdL6pYUAAAAABQiDEZJlKwyLtyyOut36xnhC7PT';
+		$secret = getValue("recaptchaSecret");
         $verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$recaptcha_response);
         $responseData = json_decode($verifyResponse);
         echo $responseData;

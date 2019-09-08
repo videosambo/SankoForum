@@ -12,33 +12,37 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 				//Jos on tarpeeksi korkea taso, näytetään formi
 				echo '<div class="content">';
 				echo "<form method='post' action=''>
-					Sektion nimi: <input type='text' name='section_name' /> <br>
-					Sektion kuvaus: <br><textarea name='section_description' /></textarea> <br>
-					<input type='submit' value='Lisää sektio' />
+					".lang("sectionName")."<input type='text' name='section_name' /> <br>
+					".lang("sectionDescription")."<br><textarea name='section_description' /></textarea> <br>
+					<input type='submit' value='".lang("addSection")."' />
 					</form>";
 				echo '</div>';
 			} else {
-				echo 'Sinä tarvitset operaattorin oikeudet jotta voit luoda sektion! <br> Sinun tasosi: ';
-				if ($_SESSION['user_level'] == 0) echo 'Jäsen';
-				if ($_SESSION['user_level'] == 1) echo 'Moderaattori';
-				if ($_SESSION['user_level'] == 2) echo 'Operaattori';
+				echo lang("errorTooLowUserLevel");
+				if ($_SESSION['user_level'] == 0) echo lang("member");
+				if ($_SESSION['user_level'] == 1) echo lang("moderator");
+				if ($_SESSION['user_level'] == 2) echo lang("admin");
 			}
 		} else {
-			echo 'Sinun pitää vahvistaa sähköpostisi jotta voit luoda sektion';
+			array_push($_SESSION['alert'], lang("errorVerifyEmailBeforeSectionCreation")."<a href='verify.php?resend=".$_SESSION['user_name']."'>".lang("clickHere")."</a>");
+			header("Location index.php", true, 301);
+			exit();
 		}
 	} else {
-		echo 'Sinun pitää kirjautua sisään jotta voit luoda sektion!';
+		array_push($_SESSION['alert'], lang("errorNeedToSignInToCreateSection"));
+		header("Location: index.php", true, 301);
+		exit();
 	}
 } else {
 	//Jos vastaanotetaan formi, tehdään sql prep statementti
 
 	//Ensin nimi
 	if (!isset($_POST['section_name']) || strlen($_POST['section_name']) <= 0) {
-		array_push($_SESSION['alert'], "Sektion nimi pitää määrittää!");
+		array_push($_SESSION['alert'], lang("errorNoSectionName"));
 	}
 	//Sitten desc
 	if (!isset($_POST['section_description']) || strlen($_POST['section_description']) <= 0) {
-		array_push($_SESSION['alert'], "Sektion kuvaus pitää määrittää!");
+		array_push($_SESSION['alert'], lang("errorNoSectionDescription"));
 	}
 	if(!empty($_SESSION['alert'])) {
 		header("Location: create_section.php", true, 301);
@@ -55,8 +59,7 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 			mysqli_stmt_bind_param($stmt, "ss", $_POST['section_name'], $_POST['section_description']);
 			//Suoritetaan quary
 			mysqli_stmt_execute($stmt);
-			echo 'Onnistuneesti luotu sektio '.$_POST['section_name'];
-			array_push($_SESSION['notification'], "Onnistuneesti luotu sektio ".$_POST['section_name']);
+			array_push($_SESSION['notification'], lang("succesfullyCreatedSection").$_POST['section_name']);
 			header("Location: index.php", true, 301);
 			exit();
 		}
