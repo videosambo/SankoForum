@@ -12,7 +12,7 @@ SankoForum is silly forum engine that is fully open source.
 
 - [x] Forum engine essentials
 - [x] Basic adminstrator functions
-- [ ] Email verification
+- [x] Email verification
 - [x] Recaptcha
 - [x] Create sections, categoeies, topics and posts
 - [ ] Manage user information
