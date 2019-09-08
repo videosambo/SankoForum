@@ -22,6 +22,9 @@ SankoForum is silly forum engine that is fully open source.
 - [x] Support for languages
 - [ ] Support for themes
 - [x] Basic configuration
+- [ ] Automatic SQL Database and table creation
+- [ ] Automatic update system
+- [ ] Private messages
 
 ### SQL
 
