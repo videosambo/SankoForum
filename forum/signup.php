@@ -92,12 +92,14 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 
 	//RecatchaV2
 	$recaptcha_response = $_POST['g-recaptcha-response'];
-	if(empty($recaptcha_response) && !empty($recaptcha_response)) {
+	if(strlen($recaptcha_response) != 0 && !empty($recaptcha_response)) {
 		$secret = '6LdL6pYUAAAAABQiDEZJlKwyLtyyOut36xnhC7PT';
         $verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$recaptcha_response);
         $responseData = json_decode($verifyResponse);
+        echo $responseData;
         if(!$responseData->success){
             array_push($_SESSION['alert'], "Vahvista recaptcha.");
+            exit();
         }
 	} else {
 		array_push($_SESSION['alert'], "Tapahtui virhe, yritä myöhemmin uudelleen!");
