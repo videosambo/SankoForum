@@ -94,6 +94,21 @@ h3 {margin: 0; padding: 0;}
     padding-top: 5px;
     text-decoration: none;
 }
+
+.link-button {
+    background-color: #00728B;
+    border: 1px solid #032472;
+    border-radius: 5px;
+    color: #FFF;
+    font-family: Arial;
+    padding: 3px;
+    text-decoration: none;
+}
+
+.link-button a:hover {
+    background-color: #009FC1;
+    padding: 5px;
+}
  
 .leftpart {
     width: 70%;

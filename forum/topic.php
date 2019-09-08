@@ -7,6 +7,7 @@ $sql = "SELECT topic_id, topic_subject FROM topics WHERE topic_id=?";
 $stmt = mysqli_stmt_init($conn);
 if(!mysqli_stmt_prepare($stmt, $sql)) {
 	echo lang("sqlError");
+	console_log(mysqli_error($conn));
 } else {
 	mysqli_stmt_bind_param($stmt, "i", $_GET['id']);
 	mysqli_stmt_execute($stmt);
@@ -17,7 +18,7 @@ if(!mysqli_stmt_prepare($stmt, $sql)) {
 	} else {
 		//Tarkistetaan onko topicia
 		if (mysqli_num_rows($result) == 0) {
-			array_push($_SESSION['alert'], "Tätä aihetta ei ole!");
+			array_push($_SESSION['alert'], lang("errorTopicNotFound"));
 			header("Location: index.php", true, 301);
 			exit();
 		} else {
@@ -42,8 +43,8 @@ if(!mysqli_stmt_prepare($stmt, $sql)) {
 					} else {
 						echo '<table border="1">
 							<tr>
-							<th>Käyttäjä</th>
-							<th>Viesti</th>
+							<th>'.lang("topicUser").'</th>
+							<th>'.lang("topicMessage").'</th>
 							</tr>';
 
 						$url = "reply.php?id=";
@@ -57,11 +58,11 @@ if(!mysqli_stmt_prepare($stmt, $sql)) {
 									<p> ' . date("h:i:s", strtotime($row['post_date'])) . '</p>';
 									if ($_SESSION['signed_in'] == true) {
 										if ($_SESSION['user_level'] >= 1) {
-											echo '<a href="edit.php?type=post&id='.$row['post_id'].'&delete=true">[POISTA]</a>';
-											echo '<a href="edit.php?type=post&id='.$row['post_id'].'">[MUOKKAA]</a>';
+											echo '<a class="link-button" href="edit.php?type=post&id='.$row['post_id'].'&delete=true">'.lang("deleteButton").'</a>';
+											echo '<a class="link-button" href="edit.php?type=post&id='.$row['post_id'].'">'.lang("editButton").'</a>';
 										} else if ($_SESSION['user_id'] == $row['post_by']) {
-											echo '<a href="edit.php?type=post&id='.$row['post_id'].'&delete=true">[POISTA]</a>';
-											echo '<a href="edit.php?type=post&id='.$row['post_id'].'">[MUOKKAA]</a>';
+											echo '<a class="link-button" href="edit.php?type=post&id='.$row['post_id'].'&delete=true">'.lang("deleteButton").'</a>';
+											echo '<a class="link-button" href="edit.php?type=post&id='.$row['post_id'].'">'.lang("editButton").'</a>';
 										}
 									}
 								echo '</td>';
@@ -76,7 +77,7 @@ if(!mysqli_stmt_prepare($stmt, $sql)) {
 								echo '<td>';
 									echo '<form method="post" action="'.$url.'">';
 										echo '<textarea name="reply-content"></textarea> <br>';
-										echo '<input type="submit" value="Lähetä vastaus" />';
+										echo '<input type="submit" value="'.lang("sendReplyButton").'" />';
 									echo '</form>';
 								echo '</td>';
 							echo '</tr>';

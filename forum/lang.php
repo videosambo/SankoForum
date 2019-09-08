@@ -87,12 +87,89 @@ function lang($msg) {
 
 		//Profile
 
-		"" => "",
-		"" => "",
-		"" => "",
-		"" => "",
-		"" => "",
-		"" => "",
+		"profileUserName" => "Nimi:",
+		"profileUserDate" => "Päivämäärä jolloin luotu:",
+		"errorProfileUserNotFound" => "Käyttäjää ei löytynyt",
+		"profileUserEmail" => "Sähköposti:",
+		"errorNeedToSignInToViewProfile" => "Sinun pitää kirjautua sisään jotta voit tarkastella profiiliasi",
+
+		//SignIn
+
+		"errorAlreadySignedIn" => "Olet jo kirjautunut sisään, voit <a href=\"signout.php\">kirjautua ulos</a> jos haluat.",
+		"usernameOrEmail" => "Käyttäjä nimi tai sähköposti: ",
+		"passwordField" => "Salasana: ",
+		"signInButton" => "Kirjaudu",
+		"errorEmptyUsernameField" => "Käyttäjänimi kenttä ei saa olla tyhjä.",
+		"errorEmptyPasswordField" => "Salasana kenttä ei saa olla tyhjä.",
+		"errorWrongUsernameOrPassword" => "Käyttäjänimi tai salasana on väärä.",
+		"succesfullySignedIn" => "Kirjautuminen onnistui!",
+
+		//Reply
+
+		"errorLinkRedirect" => "Tänne ei voi suunnata linkin kautta!",
+		"errorNeedToSignInToReply" => "Sinun pitää olla kirjautunut vastataksesi tähän viestiketjuun!",
+		"errorEmptyReplyContent" => "Vastauksessa pitää olla sisältö!",
+		"errorReplyTooShort" => "Vastauksen pituus pitää olla vähintään 10 merkkiä!",
+		"errorReplyTooLong" => "Vastauksen pituus voi olla enintään 2500 merkkiä!",
+		"succesfullySavedReplyLong" => "Sinun vastauksesi on tallennettu, katso se täältä ",
+		"succesfullySavedReply" => "Aihe luotu onnistuneesti!",
+
+		//Sing up
+
+		"createUser" => "Luo Käyttäjä",
+		"signUpUsername" => "Käyttäjänimi: ",
+		"signUpVerifyPassword" => "Vahvista salasana: ",
+		"signUpEmailField" => "Sähköposti: ",
+		"signUpCreateAccount" => "Luo",
+		"errorSignUpUsernameAlreadyInUse" => "Käyttäjänimi %s on jo käytössä",
+		"errorSignUpEmailAlreadyInUse" => "Sähköposti %s on jo käytössä",
+		"signInUsingEmail" => "<a href=\"signup.php\">Kirjaudu sisään</a> käyttäen sähköpostia '",
+		"errorSignUpOnlyNumbersAndLetters" => "Käyttäjänimi voi sisältää vain kirjaimia ja numeroita.",
+		"errorSignUpTooLong" => "Käyttäjänimi ei voi olla pidempi kuin 16 kirjainta.",
+		"errorSignUpEmpty" => "Käyttäjänimi kenttä ei saa olla tyhjä.",
+		"errorSignUpPasswordNoMatch" => "Salasana ei täsmää.",
+		"errorSignUpPasswordTooShort" => "Salasanan pitää olla pidempi kuin 6 merkkiä.",
+		"errorSignUpPasswordEmpty" => "Salasana kenttä ei saa olla tyhjä.",
+		"errorSignUpEmailIncorrect" => "Sähköposti ei kelpaa.",
+		"errorSignUpEmailEmpty" => "Sähköposti kenttä ei saa olla tyhjä.",
+		"errorSignUpVerifyRecaptcha" => "Vahvista recaptcha.",
+		"errorSignUpRecaptcha" => "Tapahtui virhe, yritä myöhemmin uudelleen!",
+		//--Email--
+		"emailTitle" => "Sähköpostin Varmistus",
+		"emailMessage" => "Vahista sähköpostisi painamalla <a href='http://localhost/sankoforum/verify.php?key=%s&email=%s'>tästä</a>",
+		"errorEmailSendFailed" => "Sähköpostin lähettäminen epäonnistui.<br>",
+
+		"succesfullyCreatedUser" => "Onnistuneesti luotu käyttäjä! Vahvista sähköpostisi niin voit <a href=\"signin.php\">kirjautua</a> ja alkaa postailemaan.",
+
+		//Signout
+
+		"userSignedOut" => "Sinut on kirjattu ulos!",
+
+		//Topic
+
+		"errorTopicNotFound" => "Tätä aihetta ei ole!",
+		"topicUser" => "Käyttäjä",
+		"topicMessage" => "Viesti",
+		"editButton" => "Muokkaa",
+		"deleteButton" => "Poista",
+		"sendReplyButton" => "Lähetä vastaus",
+
+		//Verify
+
+		"errorUserNotFound" => "Tätä käyttäjää ei ole!",
+		"errorUserNotVerifiedNotFound" => "Kyseisen käyttäjän sähköpostia ei voitu vahvistaa sillä sitä ei ole",
+		"emailVerifiedSuccesfully" => "Sähköposti vahvistettu! Nyt voit alkaa postailemaan!",
+		"verifyEmailSend" => "Vahvistus sähköposti on lähetetty",
+
+		//Category
+
+		"errorCategoryNotFound" => "Tätä kategoriaa ei ole olemassa!",
+		"topicList" => "Aiheet '%s' kategoriassa",
+		"errorEmptyCategory" => "Tässä kategoriassa ei ole vielä aiheita!",
+		"categoryTopicTitle" => "Aihe",
+		"categoryTopicCreated" => "Luotu",
+		"categoryTopicFrom" => "Käyttäjältä",
+		"" => ""
 	);
 	
 	return $message[$msg];

@@ -71,8 +71,9 @@ if(!isset($_SESSION['signed_in'])) $_SESSION['signed_in'] = false;
 		<h1>Entiset olivat aivan paskat</h1>
 		<div id="wrapper">	<!-- Start of wrapper -->
 			<div id="menu">	<!-- Start of menu bar -->
-				<a class="item" href="index.php"><?php lang("home")?></a> 
 				<?php
+				echo '<a class="item" href="index.php">'.lang("home").'</a>'; 
+				
 				$site = basename($_SERVER['PHP_SELF']);
 				if ($site == "category.php") {
 					$url = "create_topic.php?category=".$_GET['id'];

@@ -14,17 +14,17 @@ function randString(){
 
 function makeForm() {
 	echo '<form method="post" action="">
-		Käyttäjänimi: <input type="text" name="user_name" /> <br>
-		Salasana: <input type="password" name="user_pass"> <br>
-		Vahvista salasana: <input type="password" name="user_pass_check"> <br>
-		Sähköposti: <input type="email" name="user_email"> <br>
+		'.lang("signUpUsername").'<input type="text" name="user_name" /> <br>
+		'.lang("passwordField").'<input type="password" name="user_pass"> <br>
+		'.lang("signUpVerifyPassword").'<input type="password" name="user_pass_check"> <br>
+		'.lang("signUpEmailField").'<input type="email" name="user_email"> <br>
 		<div class="g-recaptcha" data-sitekey="'.getValue("recaptchaPublic").'"></div>
-		<input type="submit" value="Luo" />
+		<input type="submit" value="'.lang("signUpCreateAccount").'" />
 		</form>';
 }
 include "header.php";
 
-echo '<h3>Luo käyttäjä</h3>';
+echo '<h3>'.lang("createUser").'</h3>';
 if($_SERVER['REQUEST_METHOD'] != 'POST') {
 	//Clientin näkökulma
 	makeForm();
@@ -44,11 +44,13 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 		if(mysqli_num_rows($result) >= 0) {
 			while($row = mysqli_fetch_assoc($result)) {
 				if ($row['user_name'] == $_POST['user_name']) {
-					array_push($_SESSION['alert'], "Käyttäjänimi '".$row['user_name']."' on jo käytössä.");
+					$message = sprintf(lang("errorSignUpUsernameAlreadyInUse"), $row['user_name']);
+					array_push($_SESSION['alert'], $message);
 				}
 				if ($row['user_email'] == $_POST['user_email']) {
-					array_push($_SESSION['alert'], "Sähköposti '".$row['user_email']."' on jo käytössä.");
-					array_push($_SESSION['notification'], "<a href=\"signup.php\">Kirjaudu sisään</a> käyttäen sähköpostia '".$row['user_email']."'");
+					$message = sprintf(lang("errorSignUpEmailAlreadyInUse"), $row['user_email']);
+					array_push($_SESSION['alert'], $message);
+					array_push($_SESSION['notification'], lang("signInUsingEmail").$row['user_email']."'");
 				}
 			}
 		}
@@ -58,36 +60,36 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 	if(isset($_POST['user_name'])) {
 		$name = $_POST['user_name'];
 		if(!ctype_alnum($name)) {
-			array_push($_SESSION['alert'], "Käyttäjänimi voi sisältää vain kirjaimia ja numeroita.");
+			array_push($_SESSION['alert'], lang("errorSignUpOnlyNumbersAndLetters"));
 		}
 		if (strlen($name) > 16) {
-			array_push($_SESSION['alert'], "Käyttäjänimi ei voi olla pidempi kuin 16 kirjainta.");
+			array_push($_SESSION['alert'], lang("errorSignUpTooLong"));
 		}
 	} else {
-		array_push($_SESSION['alert'], "Käyttäjänimi kenttä ei saa olla tyhjä.");
+		array_push($_SESSION['alert'], lang("errorSignUpEmpty"));
 	}
 
 	//Tarkistetaan salasanan kelpaavuus
 	if(isset($_POST['user_pass'])) {
 		$pass = $_POST['user_pass'];
 		if ($pass != $_POST['user_pass_check']) {
-			array_push($_SESSION['alert'], "Salasana ei täsmää.");
+			array_push($_SESSION['alert'], lang("errorSignUpPasswordNoMatch"));
 		}
 		if (strlen($pass) < 6) {
-			array_push($_SESSION['alert'], "Salasanan pitää olla pidempi kuin 6 merkkiä.");
+			array_push($_SESSION['alert'], lang("errorSignUpPasswordTooShort"));
 		}
 	} else {
-		array_push($_SESSION['alert'], "Salasana kenttä ei saa olla tyhjä.");
+		array_push($_SESSION['alert'], lang("errorSignUpPasswordEmpty"));
 	}
 
 	//Tarkistetaan sähköpostikenttä
 	if(isset($_POST['user_email'])) {
 		$email = $_POST['user_email'];
 		if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-			array_push($_SESSION['alert'], "Sähköposti ei kelpaa.");
+			array_push($_SESSION['alert'], lang("errorSignUpEmailIncorrect"));
 		}
 	} else {
-		array_push($_SESSION['alert'], "Sähköposti kenttä ei saa olla tyhjä.");
+		array_push($_SESSION['alert'], lang("errorSignUpEmailEmpty"));
 	}
 
 	//RecatchaV2
@@ -98,11 +100,11 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
         $responseData = json_decode($verifyResponse);
         echo $responseData;
         if(!$responseData->success){
-            array_push($_SESSION['alert'], "Vahvista recaptcha.");
+            array_push($_SESSION['alert'], lang("errorSignUpVerifyRecaptcha"));
             exit();
         }
 	} else {
-		array_push($_SESSION['alert'], "Tapahtui virhe, yritä myöhemmin uudelleen!");
+		array_push($_SESSION['alert'], lang("errorSignUpRecaptcha"));
 	}
 
 	//Katsotaan että menikö kaikki hyvin
@@ -122,8 +124,8 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 		//Määritetään yhteys
 		$stmt = mysqli_stmt_init($conn);
 		if (!mysqli_stmt_prepare($stmt, $sql)) {
-			console_log(mysqli_error($conn));
 			echo lang("sqlError");
+			console_log(mysqli_error($conn));
 		} else {
 			//Syötetään arvot
 			$emailKey = randString();
@@ -134,16 +136,16 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 			$mail = new PHPMailer\PHPMailer\PHPMailer(true);
 			try {
 				$mail->AddAddress($_POST['user_email']);
-				$mail->Subject = "Sähköpostin varmistus";
+				$mail->Subject = lang("emailTitle");
 				$mail->isHTML(true);
-				$mail->Body = "Vahista sähköpostisi painamalla <a href='http://localhost/sankoforum/verify.php?key=".$emailKey."&email=".$_POST['user_email']."'>tästä</a>";
+				$messages = sprintf(lang("emailMessage"), $emailKey, $_POST['user_email'])
+				$mail->Body = $messages;
 				$mail->send();
 			} catch (Exception $e) {
-				array_push($_SESSION['alert'], "Sähköpostin lähettäminen epäonnistui.<br>".$mail->ErrorInfo);
+				array_push($_SESSION['alert'], lang("errorEmailSendFailed").$mail->ErrorInfo);
 			}
 
-			echo 'Onnistuneesti luotu käyttäjä! Vahvista sähköpostisi niin voit <a href="signin.php">kirjautua</a> ja alkaa postailemaan';
-			array_push($_SESSION['notification'], "Onnistuneesti luotu käyttäjä! Vahvista sähköpostisi niin voit <a href=\"signin.php\">kirjautua</a> ja alkaa postailemaan.");
+			array_push($_SESSION['notification'], lang("succesfullyCreatedUser"));
 			header("Location: index.php", true, 301);
 			exit();
 		}
