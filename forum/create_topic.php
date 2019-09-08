@@ -2,7 +2,7 @@
 include "connect.php";
 include "header.php";
 
-echo '<h2 style="color: black;">Luo aihe</h2>';
+echo '<h2 style="color: black;">'.lang("createTopic").'</h2>';
 if($_SESSION['signed_in'] == false) {
 	array_push($_SESSION['alert'], lang("errorNeedToSignInToCreatePost"));
 } else {

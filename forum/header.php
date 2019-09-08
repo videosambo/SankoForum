@@ -71,7 +71,7 @@ if(!isset($_SESSION['signed_in'])) $_SESSION['signed_in'] = false;
 		<h1>Entiset olivat aivan paskat</h1>
 		<div id="wrapper">	<!-- Start of wrapper -->
 			<div id="menu">	<!-- Start of menu bar -->
-				<a class="item" href="index.php">Koti</a> 
+				<a class="item" href="index.php"><?php lang("home")?></a> 
 				<?php
 				$site = basename($_SERVER['PHP_SELF']);
 				if ($site == "category.php") {
@@ -80,18 +80,18 @@ if(!isset($_SESSION['signed_in'])) $_SESSION['signed_in'] = false;
 					$url = "create_topic.php";
 				}
 				if($_SESSION['signed_in']) {
-					echo '<a class="item" href="'.$url.'">Luo aihe</a> ';
+					echo '<a class="item" href="'.$url.'">'.lang("createTopic").'</a> ';
 					if ($_SESSION['user_level'] >= 2) {
-						echo '<a class="item" href="create_category.php">Luo kategoria</a> ';
-						echo '<a class="item" href="create_section.php">Luo Sektio</a> ';
+						echo '<a class="item" href="create_category.php">'.lang("createCategory").'</a> ';
+						echo '<a class="item" href="create_section.php">'.lang("createSection").'</a> ';
 					}
 				}
 				echo '<div id="userbar">';
 				if($_SESSION['signed_in']) {
 					$username = $_SESSION['user_name'];
-					echo 'Terve <a class="item" href="profile.php">'.$username.'</a> <a class="item" href="signout.php">Kirjaudu ulos</a>';
+					echo lang("hello").'<a class="item" href="profile.php">'.$username.'</a> <a class="item" href="signout.php">'.lang("signOut").'</a>';
 				} else {
-					echo '<a class="item" href="signin.php">Kirjaudu sisään</a> tai <a class="item" href="signup.php">luo käyttäjä</a>.';
+					echo '<a class="item" href="signin.php">'.lang("signIn").'</a> tai <a class="item" href="signup.php">'.lang("signUp").'</a>.';
 				}
 				?>
 				</div>

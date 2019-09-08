@@ -11,7 +11,6 @@ function lang($msg) {
 
 		//Create category
 
-		"createCategory" => "Luo kategoria",
 		"errorNoSection" => "Sinun pitää luoda sektio ennen kuin voit luoda kategorian",
 		"categoryName" => "Kategorian nimi: ",
 		"categoryDescription" => "Kategorian kuvaus: ",
@@ -32,7 +31,6 @@ function lang($msg) {
 		"topicName" => "Aihe: ",
 		"categoryList" => "Kategoriat: ",
 		"topicMessage" => "Viesti: ",
-		"createTopic" => "Luo aihe",
 		"errorNoTopicTitle" => "Aiheen otsikko pitää määrittää!",
 		"errorTooShortTitle" => "Aiheen otsikko ei voi olla lyhyempi kuin 5 kirjainta!",
 		"errorTooLongTitle" => "Aiheen otsikko ei voi olla pitempi kuin 40 merkkiä!",
@@ -56,23 +54,39 @@ function lang($msg) {
 
 		//Edit
 
+		"errorNeedToSignInToEditContent" => "Sinun pitää kirjautua sisään jotta voit muokata sisältöä!",
+		"editPostDeleteSuccesfully" => "Postaus poistettu onnistuneesti",
+		"errorEditPostDeleteOnlyOwn" => "Voit poistaa vain omia postauksia",
+		"errorEditPostNoPost" => "Postausta ei ole",
+		"editPostContent" => "Sisältö: ",
+		"editPostSubmit" => "Päivitä",
+		"errorEditPostOnlyOwn" => "Voit muokata vain omia postauksia",
+		"errorEditPostNoContent" => "Sisältöä ei ole asetettu!",
+		"errorEditPostTooShort" => "Viesti on liian lyhyt!",
+		"errorEditPostTooLong" => "Viesti on liian pitkä!",
+		"editPostSuccesfully" => "Viesti päivitetty!",
 		"" => "",
 		"" => "",
-		"" => "",
-		"" => "",
-		"" => "",
-		"" => "",
-		"" => "",
-		"" => "",
-		"" => "",
-		"" => "",
-		"" => "",
-		"" => "",
-		"" => "",
-		"" => "",
-		"" => "",
-		"" => "",
-		"" => "",
+
+		//Index and page content
+
+		"home" => "Koti",
+		"createTopic" => "Luo aihe",
+		"createCategory" => "Luo kategoria",
+		"createSection" => "Luo sektio",
+		"signIn" => "Kirjaudu Sisään",
+		"signOut" => "Kirjaudu Ulos",
+		"signUp" => "Luo Käyttäjä",
+		"hello" => "Terve ",
+		"errorNoSectionCreated" => "Sektioita ei ole vielä luotu!",
+		"errorNoCategoryCreated" => "Kategorioita ei ole vielä luotu!",
+		"category" => "Kategoria",
+		"latestTopic" => "Viimeisin aihe",
+		"noTopics" => "Ei aiheita",
+		"time" => "klo",
+
+		//Profile
+
 		"" => "",
 		"" => "",
 		"" => "",

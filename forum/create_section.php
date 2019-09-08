@@ -2,7 +2,7 @@
 include "connect.php";
 include "header.php";
 
-echo '<h2 style="color: black;">Luo sektio</h2>';
+echo '<h2 style="color: black;">'.lang("createSection").'</h2>';
 if($_SERVER['REQUEST_METHOD'] != 'POST'){
 	//Jos sessio ei ole postaus, tarkistetaan onko käyttäjä kirjautunut sisään jotta voi luoda sektio
 	if($_SESSION['signed_in']){
