@@ -26,6 +26,7 @@ Demo [https://forum.simpelecraft.tk](https://forum.simpelecraft.tk)
 - [x] Basic configuration
 - [ ] Automatic SQL Database and table creation
 - [ ] Automatic update system
+- [ ] Instalation file with configuration
 - [ ] Private messages
 
 ### SQL
