@@ -6,41 +6,45 @@ echo '<h2 style="color: black;">Luo kaetegoria</h2>';
 if($_SERVER['REQUEST_METHOD'] != 'POST'){
 	//Jos sessio ei ole postaus, tarkistetaan onko käyttäjä kirjautunut sisään jotta voi luoda kategorian
 	if($_SESSION['signed_in']){
-		//Jos on kirjautuneena sisään, tarkistetaan onko käyttäjä tarpeeksi korkea taso
-		if($_SESSION['user_level'] >= 2) {
-			//Jos on tarpeeksi korkea taso, näytetään formi
-			//Hankitaan saatavilla olevat sektiot jonne kategoria sijoittuu
-			$sql = "SELECT section_id, section_name FROM sections";
-			$result = mysqli_query($conn, $sql);
-			if (!$result) {
-				echo lang("sqlError");
-			} else {
-				if (mysqli_num_rows($result) == 0) {
-					echo 'Sinun pitää luoda sektio ennen kuin voit luoda kategorian';
-					array_push($_SESSION['alert'], "Sinun pitää luoda sektio ennen kuin voit luoda kategorian");
-					header("Location: create_category.php", true, 301);
-					exit();
+		if($_SESSION['user_vertification']) {
+			//Jos on kirjautuneena sisään, tarkistetaan onko käyttäjä tarpeeksi korkea taso
+			if($_SESSION['user_level'] >= 2) {
+				//Jos on tarpeeksi korkea taso, näytetään formi
+				//Hankitaan saatavilla olevat sektiot jonne kategoria sijoittuu
+				$sql = "SELECT section_id, section_name FROM sections";
+				$result = mysqli_query($conn, $sql);
+				if (!$result) {
+					echo lang("sqlError");
 				} else {
-				echo '<div class="content">';
-				echo "<form method='post' action=''>";
-					echo "Sektio: ";
-					echo "<select name='category_section'>";
-					while ($row = mysqli_fetch_assoc($result)) {
-						echo "<option value='".$row['section_id']."'>".clean($row['section_name'])."</option> <br>";
+					if (mysqli_num_rows($result) == 0) {
+						echo 'Sinun pitää luoda sektio ennen kuin voit luoda kategorian';
+						array_push($_SESSION['alert'], "Sinun pitää luoda sektio ennen kuin voit luoda kategorian");
+						header("Location: create_category.php", true, 301);
+						exit();
+					} else {
+					echo '<div class="content">';
+					echo "<form method='post' action=''>";
+						echo "Sektio: ";
+						echo "<select name='category_section'>";
+						while ($row = mysqli_fetch_assoc($result)) {
+							echo "<option value='".$row['section_id']."'>".clean($row['section_name'])."</option> <br>";
+						}
+						echo "</select><br>";
+						echo "Kategorian nimi: <input type='text' name='category_name' /> <br>";
+						echo "Kategorian kuvaus: <br><textarea name='category_description' /></textarea> <br>";
+						echo "<input type='submit' value='Lisää kategoria' />";
+					echo "</form>";
+					echo '</div>';
 					}
-					echo "</select><br>";
-					echo "Kategorian nimi: <input type='text' name='category_name' /> <br>";
-					echo "Kategorian kuvaus: <br><textarea name='category_description' /></textarea> <br>";
-					echo "<input type='submit' value='Lisää kategoria' />";
-				echo "</form>";
-				echo '</div>';
 				}
+			} else {
+				echo 'Sinä tarvitset operaattorin oikeudet jotta voit luoda kategorian! <br> Sinun tasosi: ';
+				if ($_SESSION['user_level'] == 0) echo 'Jäsen';
+				if ($_SESSION['user_level'] == 1) echo 'Moderaattori';
+				if ($_SESSION['user_level'] == 2) echo 'Operaattori';
 			}
 		} else {
-			echo 'Sinä tarvitset operaattorin oikeudet jotta voit luoda kategorian! <br> Sinun tasosi: ';
-			if ($_SESSION['user_level'] == 0) echo 'Jäsen';
-			if ($_SESSION['user_level'] == 1) echo 'Moderaattori';
-			if ($_SESSION['user_level'] == 2) echo 'Operaattori';
+			echo 'Sinun pitää vahvistaa sähköpostisi jotta voit luoda kategorian'
 		}
 	} else {
 		array_push($_SESSION['alert'], "Sinun pitää kirjautua sisään jotta voit luoda kategorian");

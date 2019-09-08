@@ -14,6 +14,11 @@ if($_SESSION['signed_in'] == false) {
 			console_log(mysqli_error($conn));
 			echo lang("sqlError");
 		} else {
+			if($_SESSION['user_vertification'] == 0) {
+				array_push($_SESSION['alert'], "Sinun pitää vahvistaa sähköpostisi jotta voit luoda aiheita");
+				header("Location: index.php", true, 301);
+				exit();
+			}
 			if(mysqli_num_rows($result) == 0) {
 				if($_SESSION['user_level'] == 1) {
 					array_push($_SESSION['alert'], "Et ole luonut kategoriaa vielä");

@@ -6,21 +6,25 @@ echo '<h2 style="color: black;">Luo sektio</h2>';
 if($_SERVER['REQUEST_METHOD'] != 'POST'){
 	//Jos sessio ei ole postaus, tarkistetaan onko käyttäjä kirjautunut sisään jotta voi luoda sektio
 	if($_SESSION['signed_in']){
-		//Jos on kirjautuneena sisään, tarkistetaan onko käyttäjä tarpeeksi korkea taso
-		if($_SESSION['user_level'] >= 2) {
-			//Jos on tarpeeksi korkea taso, näytetään formi
-			echo '<div class="content">';
-			echo "<form method='post' action=''>
-				Sektion nimi: <input type='text' name='section_name' /> <br>
-				Sektion kuvaus: <br><textarea name='section_description' /></textarea> <br>
-				<input type='submit' value='Lisää sektio' />
-				</form>";
-			echo '</div>';
+		if($_SESSION['user_vertification'] == 1) {
+			//Jos on kirjautuneena sisään, tarkistetaan onko käyttäjä tarpeeksi korkea taso
+			if($_SESSION['user_level'] >= 2) {
+				//Jos on tarpeeksi korkea taso, näytetään formi
+				echo '<div class="content">';
+				echo "<form method='post' action=''>
+					Sektion nimi: <input type='text' name='section_name' /> <br>
+					Sektion kuvaus: <br><textarea name='section_description' /></textarea> <br>
+					<input type='submit' value='Lisää sektio' />
+					</form>";
+				echo '</div>';
+			} else {
+				echo 'Sinä tarvitset operaattorin oikeudet jotta voit luoda sektion! <br> Sinun tasosi: ';
+				if ($_SESSION['user_level'] == 0) echo 'Jäsen';
+				if ($_SESSION['user_level'] == 1) echo 'Moderaattori';
+				if ($_SESSION['user_level'] == 2) echo 'Operaattori';
+			}
 		} else {
-			echo 'Sinä tarvitset operaattorin oikeudet jotta voit luoda sektion! <br> Sinun tasosi: ';
-			if ($_SESSION['user_level'] == 0) echo 'Jäsen';
-			if ($_SESSION['user_level'] == 1) echo 'Moderaattori';
-			if ($_SESSION['user_level'] == 2) echo 'Operaattori';
+			echo 'Sinun pitää vahvistaa sähköpostisi jotta voit luoda sektion';
 		}
 	} else {
 		echo 'Sinun pitää kirjautua sisään jotta voit luoda sektion!';

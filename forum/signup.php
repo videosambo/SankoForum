@@ -90,10 +90,11 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 		array_push($_SESSION['alert'], "Sähköposti kenttä ei saa olla tyhjä.");
 	}
 
-	RecatchaV2
-	if(isset($_POST['g-recaptcha-response']) && !empty($_POST['g-recaptcha-response'])) {
+	//RecatchaV2
+	$recaptcha_response = $_POST['g-recaptcha-response'];
+	if(empty($recaptcha_response) && !empty($recaptcha_response)) {
 		$secret = '6LdL6pYUAAAAABQiDEZJlKwyLtyyOut36xnhC7PT';
-        $verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$_POST['g-recaptcha-response']);
+        $verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$recaptcha_response);
         $responseData = json_decode($verifyResponse);
         if(!$responseData->success){
             array_push($_SESSION['alert'], "Vahvista recaptcha.");
