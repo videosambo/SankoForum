@@ -1,4 +1,7 @@
 <?php
+require("PHPMailer/src/PHPMailer.php");
+require("PHPMailer/src/Exception.php");
+
 include "connect.php";
 function randString(){
 	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -88,12 +91,15 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 	}
 
 	//RecatchaV2
-	if(isset($_POST['g-recaptcha-response']) && !empty($_POST['g-recaptcha-response'])) {
+	$recaptcha_response = $_POST['g-recaptcha-response'];
+	if(strlen($recaptcha_response) != 0 && !empty($recaptcha_response)) {
 		$secret = '6LdL6pYUAAAAABQiDEZJlKwyLtyyOut36xnhC7PT';
-        $verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$_POST['g-recaptcha-response']);
+        $verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$recaptcha_response);
         $responseData = json_decode($verifyResponse);
+        echo $responseData;
         if(!$responseData->success){
             array_push($_SESSION['alert'], "Vahvista recaptcha.");
+            exit();
         }
 	} else {
 		array_push($_SESSION['alert'], "Tapahtui virhe, yritä myöhemmin uudelleen!");
@@ -120,11 +126,24 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 			echo lang("sqlError");
 		} else {
 			//Syötetään arvot
-			mysqli_stmt_bind_param($stmt, "ssss", $_POST['user_name'], $password, $_POST['user_email'], randString());
+			$emailKey = randString();
+			mysqli_stmt_bind_param($stmt, "ssss", $_POST['user_name'], $password, $_POST['user_email'], $emailKey);
 			//Suoritetaan quary
 			mysqli_stmt_execute($stmt);
-			echo 'Onnistuneesti luotu käyttäjä! Nyt voit <a href="signin.php">kirjautua</a> ja alkaa postailemaan';
-			array_push($_SESSION['notification'], "Onnistuneesti luotu käyttäjä! Nyt voit <a href=\"signin.php\">kirjautua</a> ja alkaa postailemaan.");
+			//Sähköposti
+			$mail = new PHPMailer\PHPMailer\PHPMailer(true);
+			try {
+				$mail->AddAddress($_POST['user_email']);
+				$mail->Subject = "Sähköpostin varmistus";
+				$mail->isHTML(true);
+				$mail->Body = "Vahista sähköpostisi painamalla <a href='http://localhost/sankoforum/verify.php?key=".$emailKey."&email=".$_POST['user_email']."'>tästä</a>";
+				$mail->send();
+			} catch (Exception $e) {
+				array_push($_SESSION['alert'], "Sähköpostin lähettäminen epäonnistui.<br>".$mail->ErrorInfo);
+			}
+
+			echo 'Onnistuneesti luotu käyttäjä! Vahvista sähköpostisi niin voit <a href="signin.php">kirjautua</a> ja alkaa postailemaan';
+			array_push($_SESSION['notification'], "Onnistuneesti luotu käyttäjä! Vahvista sähköpostisi niin voit <a href=\"signin.php\">kirjautua</a> ja alkaa postailemaan.");
 			header("Location: index.php", true, 301);
 			exit();
 		}
