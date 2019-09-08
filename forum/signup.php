@@ -90,17 +90,17 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 		array_push($_SESSION['alert'], "Sähköposti kenttä ei saa olla tyhjä.");
 	}
 
-	//RecatchaV2
-	//if(isset($_POST['g-recaptcha-response']) && !empty($_POST['g-recaptcha-response'])) {
-	//	$secret = '6LdL6pYUAAAAABQiDEZJlKwyLtyyOut36xnhC7PT';
-    //    $verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$_POST['g-recaptcha-response']);
-    //    $responseData = json_decode($verifyResponse);
-    //    if(!$responseData->success){
-    //        array_push($_SESSION['alert'], "Vahvista recaptcha.");
-    //    }
-	//} else {
-	//	array_push($_SESSION['alert'], "Tapahtui virhe, yritä myöhemmin uudelleen!");
-	//}
+	RecatchaV2
+	if(isset($_POST['g-recaptcha-response']) && !empty($_POST['g-recaptcha-response'])) {
+		$secret = '6LdL6pYUAAAAABQiDEZJlKwyLtyyOut36xnhC7PT';
+        $verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$_POST['g-recaptcha-response']);
+        $responseData = json_decode($verifyResponse);
+        if(!$responseData->success){
+            array_push($_SESSION['alert'], "Vahvista recaptcha.");
+        }
+	} else {
+		array_push($_SESSION['alert'], "Tapahtui virhe, yritä myöhemmin uudelleen!");
+	}
 
 	//Katsotaan että menikö kaikki hyvin
 	if(!empty($_SESSION['alert'])) {
