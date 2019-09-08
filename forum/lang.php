@@ -136,7 +136,7 @@ function lang($msg) {
 		"errorSignUpRecaptcha" => "Tapahtui virhe, yritä myöhemmin uudelleen!",
 		//--Email--
 		"emailTitle" => "Sähköpostin Varmistus",
-		"emailMessage" => "Vahista sähköpostisi painamalla <a href='http://localhost/sankoforum/verify.php?key=%s&email=%s'>tästä</a>",
+		"emailMessage" => "Vahista sähköpostisi painamalla <a href='http://%1\$s/verify.php?key=%2\$s&email=%3\$s'>tästä</a>",
 		"errorEmailSendFailed" => "Sähköpostin lähettäminen epäonnistui.<br>",
 
 		"succesfullyCreatedUser" => "Onnistuneesti luotu käyttäjä! Vahvista sähköpostisi niin voit <a href=\"signin.php\">kirjautua</a> ja alkaa postailemaan.",
@@ -168,8 +168,7 @@ function lang($msg) {
 		"errorEmptyCategory" => "Tässä kategoriassa ei ole vielä aiheita!",
 		"categoryTopicTitle" => "Aihe",
 		"categoryTopicCreated" => "Luotu",
-		"categoryTopicFrom" => "Käyttäjältä",
-		"" => ""
+		"categoryTopicFrom" => "Käyttäjältä"
 	);
 	
 	return $message[$msg];

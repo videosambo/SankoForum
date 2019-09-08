@@ -1,5 +1,6 @@
 <?php
 //Asetukset
+include "config.php";
 $server = getValue("sqlServer");
 $username = getValue("sqlUsername");
 $password = getValue("sqlPassword");

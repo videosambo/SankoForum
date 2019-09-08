@@ -98,6 +98,7 @@ h3 {margin: 0; padding: 0;}
 .link-button {
     background-color: #00728B;
     border: 1px solid #032472;
+    margin-right: 5px;
     border-radius: 5px;
     color: #FFF;
     font-family: Arial;

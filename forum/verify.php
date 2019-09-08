@@ -1,6 +1,7 @@
 <?php
 require("PHPMailer/src/PHPMailer.php");
 require("PHPMailer/src/Exception.php");
+require("PHPMailer/src/SMTP.php");
 
 include "connect.php";
 include "header.php";
@@ -97,10 +98,21 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 				$row = mysqli_fetch_assoc($result);
 				$mail = new PHPMailer\PHPMailer\PHPMailer(true);
 				try {
+					$mail->isSMTP();
+					$mail->Host = getValue("SMTPHost");
+					$mail->SMTPAuth = true;
+					$mail->Username = getValue("SMTPUser");
+					$mail->Password = getValue("SMTPPassword");
+					$mail->SMTPSecure = getValue("SMTPProtocol");
+					$mail->Port = getValue("SMTPPort");
+					$mail->setFrom(getValue("emailFrom"));
+
 					$mail->AddAddress($email);
 					$mail->Subject = lang("emailTitle");
 					$mail->isHTML(true);
-					$messages = sprintf(lang("emailMessage"), .$row['email_token'], $_POST['user_email'])
+					$token = $row['email_token'];
+					$email = $_POST['email'];
+					$messages = sprintf(lang("emailMessage"), getValue("domain"), $token, $email);
 					$mail->Body = $messages;
 					$mail->send();
 				} catch (Exception $e) {
