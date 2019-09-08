@@ -11,6 +11,7 @@ if($_SESSION['signed_in'] == true) {
 		$stmt = mysqli_stmt_init($conn);
 		if(!mysqli_stmt_prepare($stmt, $sql)) {
 			echo lang("sqlError");
+			console_log(mysqli_error($conn));
 		} else {
 			$id = clean($_GET['id']);
 			mysqli_stmt_bind_param($stmt, "i", $id);
@@ -18,6 +19,7 @@ if($_SESSION['signed_in'] == true) {
 			$result = mysqli_stmt_get_result($stmt);
 			if(!$result) {
 				echo lang("sqlError");
+				console_log(mysqli_error($conn));
 			} else {
 				//Tarkistetaan onko käyttäjää idllä millä etsittiin
 				if(mysqli_num_rows($result)) {
@@ -25,12 +27,12 @@ if($_SESSION['signed_in'] == true) {
 					while ($row = mysqli_fetch_assoc($result)) {
 
 						echo "<img src=\"" . avatar($row["user_email"]) ."\">";
-						echo '<h4>Nimi:</h4>'.$row['user_name'].'<br>';
-						echo '<h4>Päivämäärä jolloin luotu:</h4>'.$row['user_date'].'<br>';
+						echo '<h4>'.lang("profileUserName").'</h4>'.$row['user_name'].'<br>';
+						echo '<h4>'.lang("profileUserDate").'</h4>'.$row['user_date'].'<br>';
 					}
 					echo '</div>';
 				} else {
-					array_push($_SESSION['alert'], "Käyttäjää ei löytynyt");
+					array_push($_SESSION['alert'], lang("errorProfileUserNotFound"));
 					header("Location: index.php", true, 301);
 					exit();
 				}
@@ -42,18 +44,19 @@ if($_SESSION['signed_in'] == true) {
 		$result = mysqli_query($conn, $sql);
 		if (!$result) {
 			echo lang("sqlError");
+			console_log(mysqli_error($conn));
 		} else {
 			if (mysqli_num_rows($result) == 0) {
-				array_push($_SESSION['alert'], "Käyttäjää ei ole");
+				array_push($_SESSION['alert'], lang("errorProfileUserNotFound"));
 				header("Location: index.php", true, 301);
 				exit();
 			} else {
 				echo '<div class="content">';
 				while ($row = mysqli_fetch_assoc($result)) {
 					echo "<img src=\"" . avatar($row["user_email"]) ."\">";
-					echo '<h4>Nimi:</h4>'.$row['user_name'].'<br>';
-					echo '<h4>Päivämäärä jolloin luotu:</h4>'.$row['user_date'].'<br>';
-					echo '<h4>Sähköposti:</h4>'.$row['user_email'].'<br>';
+					echo '<h4>'.lang("profileUserName").'</h4>'.$row['user_name'].'<br>';
+					echo '<h4>'.lang("profileUserDate").'</h4>'.$row['user_date'].'<br>';
+					echo '<h4>'.lang("profileUserEmail").'</h4>'.$row['user_email'].'<br>';
 				}
 				echo '</div>';
 			}
@@ -66,6 +69,7 @@ if($_SESSION['signed_in'] == true) {
 		$stmt = mysqli_stmt_init($conn);
 		if(!mysqli_stmt_prepare($stmt, $sql)) {
 			echo lang("sqlError");
+			console_log(mysqli_error($conn));
 		} else {
 			$id = clean($_GET['id']);
 			mysqli_stmt_bind_param($stmt, "i", $id);
@@ -73,6 +77,7 @@ if($_SESSION['signed_in'] == true) {
 			$result = mysqli_stmt_get_result($stmt);
 			if(!$result) {
 				echo lang("sqlError");
+				console_log(mysqli_error($conn));
 			} else {
 				if(mysqli_num_rows($result)) {
 					echo '<div class="content">';
@@ -83,14 +88,14 @@ if($_SESSION['signed_in'] == true) {
 					}
 					echo '</div>';
 				} else {
-					array_push($_SESSION['alert'], "Käyttäjää ei löytynyt");
+					array_push($_SESSION['alert'], lang("errorProfileUserNotFound"));
 					header("Location: index.php", true, 301);
 					exit();
 				}
 			}
 		}
 	} else {
-		array_push($_SESSION['alert'], "Sinun pitää kirjautua sisään jotta voit tarkastella profiiliasi");
+		array_push($_SESSION['alert'], lang("errorNeedToSignInToViewProfile"));
 		header("Location: index.php", true, 301);
 		exit();
 	}

@@ -1,9 +1,10 @@
 <?php
 //Asetukset
-$server = 'localhost:3306';
-$username   = 'forumadmin';
-$password   = 'LfFPhiM1pzYTDWPq';
-$database   = 'USE sankoforum';
+include "config.php";
+$server = getValue("sqlServer");
+$username = getValue("sqlUsername");
+$password = getValue("sqlPassword");
+$database = getValue("sqlDatabase");
  
  //Yhdistetään databaseen
 $conn = new mysqli($server, $username, $password);

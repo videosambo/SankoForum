@@ -7,10 +7,11 @@ $sql = "SELECT section_id, section_name, section_description FROM sections";
 $result = mysqli_query($conn, $sql);
 if(!$result) {
 	echo lang("sqlError");
+	console_log(mysqli_error($conn));
 } else {
 	//Tarkistetaan sektioitten saatavuus
 	if(mysqli_num_rows($result) == 0) {
-		echo '<h2>Sektioita ei ole vielä luotu!</h2>';
+		echo '<h2>'.lang("errorNoSectionCreated").'</h2>';
 	} else {
 		//Luodaan sectioit etusivulle jos niitä on
 		echo '<div id="sections">';
@@ -22,14 +23,14 @@ if(!$result) {
 			echo '<h3 style="float: left;">'.clean($row['section_name']).'</h3> '.clean($row['section_description']).'<br>';
 			if (mysqli_num_rows($categories) == 0) {
 				//Kategorioita ei ole
-				echo '<h3 class="label">Kategorioita ei ole vielä luotu!</h3>';
+				echo '<h3 class="label">'.lang("errorNoCategoryCreated").'</h3>';
 			} else {
 				//Kategorioita on, katsotaan mitä postauksia kategorian sisälle tulee
 				//Tehdään kategorialle table
 				echo '<table border="1">
 					<tr>
-					<th>Kategoria</th>
-					<th>Viimeisin aihe</th>
+					<th>'.lang("category").'</th>
+					<th>'.lang("latestTopic").'</th>
 					</tr>';
 				//Loopataan kategorin postaukset
 				while($categoryRow = mysqli_fetch_assoc($categories)){
@@ -39,10 +40,10 @@ if(!$result) {
 					$post = mysqli_fetch_assoc($sel);
 					//Tarkistetaan onko postauksia luotu
 					if(mysqli_num_rows($sel) == 0) {
-						$latest = "Ei aiheita";
+						$latest = lang("noTopics");
 					} else {
 						//Kategoriaoita on luotu, laitetaan viimisin aihe
-						$latest = '<a href="topic.php?id=' . $post['topic_id'] . '">' . clean($post['topic_subject']) . '</a> klo ' . date("h:i:s", strtotime($post['topic_date']));
+						$latest = '<a href="topic.php?id=' . $post['topic_id'] . '">' . clean($post['topic_subject']) . '</a> '.lang("time").' ' . date("h:i:s", strtotime($post['topic_date']));
 					}
 					//Sitten tehdään postauksesta table
 					echo '<tr>';

@@ -2,7 +2,7 @@
 include "connect.php";
 include "header.php";
 
-echo '<h2 style="color: black;">Luo kaetegoria</h2>';
+echo '<h2 style="color: black;">'.lang("createCategory").'</h2>';
 if($_SERVER['REQUEST_METHOD'] != 'POST'){
 	//Jos sessio ei ole postaus, tarkistetaan onko käyttäjä kirjautunut sisään jotta voi luoda kategorian
 	if($_SESSION['signed_in']){
@@ -17,37 +17,38 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 					echo lang("sqlError");
 				} else {
 					if (mysqli_num_rows($result) == 0) {
-						echo 'Sinun pitää luoda sektio ennen kuin voit luoda kategorian';
-						array_push($_SESSION['alert'], "Sinun pitää luoda sektio ennen kuin voit luoda kategorian");
+						array_push($_SESSION['alert'], lang("errorNoSection"));
 						header("Location: create_category.php", true, 301);
 						exit();
 					} else {
 					echo '<div class="content">';
-					echo "<form method='post' action=''>";
-						echo "Sektio: ";
-						echo "<select name='category_section'>";
-						while ($row = mysqli_fetch_assoc($result)) {
-							echo "<option value='".$row['section_id']."'>".clean($row['section_name'])."</option> <br>";
-						}
-						echo "</select><br>";
-						echo "Kategorian nimi: <input type='text' name='category_name' /> <br>";
-						echo "Kategorian kuvaus: <br><textarea name='category_description' /></textarea> <br>";
-						echo "<input type='submit' value='Lisää kategoria' />";
-					echo "</form>";
+						echo "<form method='post' action=''>";
+							echo "Sektio: ";
+							echo "<select name='category_section'>";
+							while ($row = mysqli_fetch_assoc($result)) {
+								echo "<option value='".$row['section_id']."'>".clean($row['section_name'])."</option> <br>";
+							}
+							echo "</select><br>";
+							echo lang("categoryName")."<input type='text' name='category_name' /> <br>";
+							echo lang("categoryDescription")."<br><textarea name='category_description' /></textarea> <br>";
+							echo "<input type='submit' value='".lang("addCategory")."' />";
+						echo "</form>";
 					echo '</div>';
 					}
 				}
 			} else {
-				echo 'Sinä tarvitset operaattorin oikeudet jotta voit luoda kategorian! <br> Sinun tasosi: ';
-				if ($_SESSION['user_level'] == 0) echo 'Jäsen';
-				if ($_SESSION['user_level'] == 1) echo 'Moderaattori';
-				if ($_SESSION['user_level'] == 2) echo 'Operaattori';
+				echo lang("errorTooLowUserLevel");
+				if ($_SESSION['user_level'] == 0) echo lang("member");
+				if ($_SESSION['user_level'] == 1) echo lang("moderator");
+				if ($_SESSION['user_level'] == 2) echo lang("admin");
 			}
 		} else {
-			echo 'Sinun pitää vahvistaa sähköpostisi jotta voit luoda kategorian'
+			array_push($_SESSION['alert'], lang("errorVerifyEmailBeforeCategoryCreation"));
+			header("Location: index.php", true, 301);
+			exit();
 		}
 	} else {
-		array_push($_SESSION['alert'], "Sinun pitää kirjautua sisään jotta voit luoda kategorian");
+		array_push($_SESSION['alert'], lang("errorLogInToCreateCategory"));
 		header("Location: index.php", true, 301);
 		exit();
 	}
@@ -55,18 +56,17 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 	//Tarkistetaan arvot
 	//Ensin nimi
 	if (!isset($_POST['category_name']) || strlen($_POST['category_name']) <= 0) {
-		array_push($_SESSION['alert'], "Kategorian nimi pitää määrittää");
+		array_push($_SESSION['alert'], lang("errorDefineCategoryName"));
 	}
 	//Sitten desc
 	if (!isset($_POST['category_description']) || strlen($_POST['category_description']) <= 0) {
-		array_push($_SESSION['alert'], "Kategorian kuvaus pitää määrittää!");
+		array_push($_SESSION['alert'], lang("errorDefineCategoryDescription"));
 	}
 	//Tarkistetaan että sektio on määritetty
 	if (!isset($_POST['category_section']) || strlen($_POST['category_section']) <= 0) {
-		array_push($_SESSION['alert'], "Kategorian sektio pitää määrittää!");
+		array_push($_SESSION['alert'], lang("errorDefineCategorySektion"));
 	}
 	if(!empty($_SESSION['alert'])) {
-		echo 'Muutamassa kentässä on virhe...';
 		//Luodaan jokaiselle paskalle oma error
 		header("Location: create_category.php", true, 301);
 		exit();
@@ -83,8 +83,7 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 			mysqli_stmt_bind_param($stmt, "sis", $_POST['category_name'], $_POST['category_section'], $_POST['category_description']);
 			//Suoritetaan quary
 			mysqli_stmt_execute($stmt);
-			echo 'Onnistuneesti luotu kategoria '.$_POST['category_name'];
-			array_push($_SESSION['notification'], "Onnistuneesti luotu kategoria ".$_POST['category_name']);
+			array_push($_SESSION['notification'], lang("succesfullyCreatedCategory").$_POST['category_name']);
 			header("Location: index.php", true, 301);
 			exit();
 		}

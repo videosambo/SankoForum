@@ -2,10 +2,15 @@
 include "connect.php";
 include "header.php";
 
-echo '<h2 style="color: black;">Luo aihe</h2>';
+echo '<h2 style="color: black;">'.lang("createTopic").'</h2>';
 if($_SESSION['signed_in'] == false) {
-	echo 'Sinun pitää <a href="signin.php">Kirjautua</a> luodaksesi aihe';
+	array_push($_SESSION['alert'], lang("errorNeedToSignInToCreatePost"));
 } else {
+	if($_SESSION['user_vertification'] == 0) {
+		array_push($_SESSION['alert'], lang("errorVerifyEmailBeforeTopicCreation"));
+		header("Location: index.php", true, 301);
+		exit();
+	}
 	if ($_SERVER['REQUEST_METHOD'] != 'POST') {
 
 		$sql = "SELECT category_id, category_name, category_description FROM categories";
@@ -14,24 +19,19 @@ if($_SESSION['signed_in'] == false) {
 			console_log(mysqli_error($conn));
 			echo lang("sqlError");
 		} else {
-			if($_SESSION['user_vertification'] == 0) {
-				array_push($_SESSION['alert'], "Sinun pitää vahvistaa sähköpostisi jotta voit luoda aiheita");
-				header("Location: index.php", true, 301);
-				exit();
-			}
 			if(mysqli_num_rows($result) == 0) {
 				if($_SESSION['user_level'] == 1) {
-					array_push($_SESSION['alert'], "Et ole luonut kategoriaa vielä");
+					array_push($_SESSION['alert'], lang("adminNoCategories"));
 				} else {
-					array_push($_SESSION['alert'], "Ennen kuin voit julkasita aiheita, sinun pitää odottaa jotta operaattori luo kategorian jonne luoda aihe.");
+					array_push($_SESSION['alert'], lang("memberNoCategories"));
 				}
 				header("Location: index.php", true, 301);
 				exit();
 			} else {
 				echo '<div class="content">';
 				echo '<form method="post" action="">';
-					echo 'Aihe: <input type="text" name="topic_subject" /> <br>';
-					echo 'Kategoriat: ';
+					echo lang("topicName").'<input type="text" name="topic_subject" /> <br>';
+					echo lang("categoryList");
 					echo '<select name="topic_category">';
 					if (isset($_GET['category'])) {
 						while($row = mysqli_fetch_assoc($result)) {
@@ -45,8 +45,8 @@ if($_SESSION['signed_in'] == false) {
 						}
 					}
 					echo '</select> <br>';
-					echo 'Viesti: <textarea name="post_content" /></textarea> <br>';
-					echo '<input type="submit" value="Luo aihe" />';
+					echo lang("topicMessage").'<textarea name="post_content" /></textarea> <br>';
+					echo '<input type="submit" value="'.lang("createTopic").'" />';
 				echo '</form>';
 				echo '</div>';
 			}
@@ -55,26 +55,26 @@ if($_SESSION['signed_in'] == false) {
 		if (isset($_POST['topic_category'])) {
 
 			if(!isset($_POST['topic_subject']) || strlen($_POST['topic_subject']) <= 0) {
-				array_push($_SESSION['alert'], "Aiheen otsikko pitää määrittää!");
+				array_push($_SESSION['alert'], lang("errorNoTopicTitle"));
 			} else {
 				if (strlen($_POST['topic_subject']) <= 5) {
-					array_push($_SESSION['alert'], "Aiheen otsikko ei voi olla lyhyempi kuin 5 kirjainta!");
+					array_push($_SESSION['alert'], lang("errorTooShortTitle"));
 				}
 				if (strlen($_POST['topic_subject']) >= 40) {
-					array_push($_SESSION['alert'], "Aiheen otsikko ei voi olla pitempi kuin 40 merkkiä!");
+					array_push($_SESSION['alert'], lang("errorTooLongTitle"));
 				}
 			}
 			if(!isset($_POST['topic_category']) || strlen($_POST['topic_category']) <= 0) {
-				array_push($_SESSION['alert'], "Aiheen kategoria pitää määrittää!");
+				array_push($_SESSION['alert'], lang("errorNoTopicCategory"));
 			}
 			if(!isset($_POST['post_content']) || strlen($_POST['post_content']) <= 0) {
-				array_push($_SESSION['alert'], "Aiheen sisältö pitää määrittää!");
+				array_push($_SESSION['alert'], lang("errorNoTopicContent"));
 			} else {
 				if (strlen($_POST['post_content']) <= 10) {
-					array_push($_SESSION['alert'], "Sisältö ei voi olla lyhyempi kuin 10 kirjainta!");
+					array_push($_SESSION['alert'], lang("errorTooShortTopicContent"));
 				}
 				if (strlen($_POST['post_content']) >= 2500) {
-					array_push($_SESSION['alert'], "Sisältö ei voi olla pitempi kuin 2500 merkkiä!");
+					array_push($_SESSION['alert'], lang("errorTooShortLongContent"));
 				}
 			}
 			if (!empty($_SESSION['alert'])) {
@@ -87,6 +87,7 @@ if($_SESSION['signed_in'] == false) {
 			if(!mysqli_stmt_prepare($stmt, $sql)) {
 				console_log(mysqli_error($conn));
 				echo lang("sqlError");
+				console_log(mysqli_error($conn));
 			} else {
 				$subject = clean($_POST['topic_subject']);
 				mysqli_stmt_bind_param($stmt, "sis", $subject, $_POST['topic_category'], $_SESSION['user_id']);
@@ -103,14 +104,13 @@ if($_SESSION['signed_in'] == false) {
 					$content = clean($_POST['post_content']);
 					mysqli_stmt_bind_param($stmt, "sis", $content, $topicid, $_SESSION['user_id']);
 					mysqli_stmt_execute($stmt);
-					echo 'Onnistuneesti luotu <a href="topic.php?id='.$topicid.'">aihe</a>';
-					array_push($_SESSION['notification'], "Onnistuneesti luotu aihe ");
+					array_push($_SESSION['notification'], lang("succesfullyCreatedTopic"));
 					header("Location: topic.php?id=".$topicid, true, 301);
 					exit();
 				}
 			}
 		} else {
-			array_push($_SESSION['alert'], "Kategoriaa ei ole olemassa");
+			array_push($_SESSION['alert'], lang("errorNoCategory"));
 			header("Location: create_topic.php", true, 301);
 			exit();
 		}

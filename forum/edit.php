@@ -7,8 +7,7 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 	//Jos tullaan normisti niin tarkistetaan onko käyttäjä online
 	if(!$_SESSION['signed_in']) {
 		//Jos ei ole kirjautunut niin heitetään se pois
-		echo 'Sinun pitää kirjautua sisään jotta voit muokata sisältöä!';
-		array_push($_SESSION['alert'], "Sinun pitää kirjautua sisään jotta voit muokata sisältöä!");
+		array_push($_SESSION['alert'], lang("errorNeedToSignInToEditContent"));
 		header("Location: index.php", true, 301);
 		exit();
 	} else {
@@ -32,17 +31,18 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 				$stmt = mysqli_stmt_init($conn);
 				if(!mysqli_stmt_prepare($stmt, $sql)) {
 					echo lang("sqlError");
+					console_log(mysqli_error($conn));
 				} else {
 					mysqli_stmt_bind_param($stmt, "i", $_GET['id']);
 					mysqli_stmt_execute($stmt);
 					$result = mysqli_stmt_get_result($stmt);
 					if (!$result) {
 						echo lang("sqlError");
-						echo mysqli_error($conn);
+						console_log(mysqli_error($conn));
 					} else {
 						//Tarkistetaan onko postausta olemassa
 						if(mysqli_num_rows($result) == 0) {
-							array_push($_SESSION['alert'], "Postausta ei ole");
+							array_push($_SESSION['alert'], lang("errorEditPostNoPost"));
 							header("Location: index.php", true, 301);
 							exit();
 						} else {
@@ -56,15 +56,16 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 									$stmt = mysqli_stmt_init($conn);
 									if(!mysqli_stmt_prepare($stmt, $sql)) {
 										echo lang("sqlError");
+										console_log(mysqli_error($conn));
 									} else {
 										mysqli_stmt_bind_param($stmt, "ii", $_GET['id'], $_SESSION['user_id']);
 										mysqli_execute($stmt);
-										array_push($_SESSION['notification'], "Postaus poistettu onnistuneesti");
+										array_push($_SESSION['notification'], lang("editPostDeleteSuccesfully"));
 										header("Location: topic.php?id=".$row['post_topic'], true, 301);
 										exit();
 									}
 								} else {
-									array_push($_SESSION['alert'], "Voit poistaa vain omia postauksia");
+									array_push($_SESSION['alert'], lang("errorEditPostDeleteOnlyOwn"));
 									header("Location: index.php", true, 301);
 									exit();
 								}
@@ -74,10 +75,11 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 								$stmt = mysqli_stmt_init($conn);
 								if(!mysqli_stmt_prepare($stmt, $sql)) {
 									echo lang("sqlError");
-								} else {
+									console_log(mysqli_error($conn));
+									} else {
 									mysqli_stmt_bind_param($stmt, "ii", $_GET['id'], $_SESSION['user_id']);
 									mysqli_execute($stmt);
-									array_push($_SESSION['notification'], "Postaus poistettu onnistuneesti");
+									array_push($_SESSION['notification'], lang("editPostDeleteSuccesfully"));
 									header("Location: topic.php?id=".$row['post_topic'], true, 301);
 									exit();
 								}
@@ -90,16 +92,17 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 				$stmt = mysqli_stmt_init($conn);
 				if(!mysqli_stmt_prepare($stmt, $sql)) {
 					echo lang("sqlError");
+					console_log(mysqli_error($conn));
 				} else {
 					mysqli_stmt_bind_param($stmt, "i", $_GET['id']);
 					mysqli_stmt_execute($stmt);
 					$result = mysqli_stmt_get_result($stmt);
 					if (!$result) {
 						echo lang("sqlError");
-						echo mysqli_error($conn);
+						console_log(mysqli_error($conn));
 					} else { 
 							if(mysqli_num_rows($result) == 0) {
-							array_push($_SESSION['alert'], "Postausta ei ole");
+							array_push($_SESSION['alert'], lang("errorEditPostNoPost"));
 							header("Location: index.php", true, 301);
 							exit();
 						} else {
@@ -107,20 +110,20 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 							if($_SESSION['user_level'] >= 1) {
 								echo '<div class="content">';
 								echo '<form method="post" action="edit.php?type=post&id='.$row['post_id'].'">';
-									echo 'Sisältö: <br>';
+									echo lang("editPostContent").'<br>';
 									echo '<textarea name="post-content" /></textarea>';
-									echo '<input type="submit" value="Päivitä" />';
+									echo '<input type="submit" value="'.lang("editPostSubmit").'" />';
 								echo '</form>';
 							} else {
 								if($_SESSION['user_id'] == $row['post_by']) {
 									echo '<div class="content">';
 									echo '<form method="post" action="edit.php?type=post&id='.$row['post_id'].'">';
-										echo 'Sisältö: <br>';
+										echo lang("editPostContent").'<br>';
 										echo '<textarea name="post-content" /></textarea>';
-										echo '<input type="submit" value="Päivitä" />';
+										echo '<input type="submit" value="'.lang("editPostSubmit").'" />';
 									echo '</form>';
 								} else {
-									array_push($_SESSION['alert'], "Voit muokata vain omia postauksia");
+									array_push($_SESSION['alert'], lang("errorEditPostOnlyOwn"));
 									header("Location: index.php", true, 301);
 									exit();	
 								}
@@ -161,16 +164,18 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 			$stmt = mysqli_stmt_init($conn);
 			if(!mysqli_stmt_prepare($stmt, $sql)) {
 				echo lang("sqlError");
+				console_log(mysqli_error($conn));
 			} else {
 				mysqli_stmt_bind_param($stmt, "i", $_GET['id']);
 				mysqli_execute($stmt);
 				$result = mysqli_stmt_get_result($stmt);
 				if(!$result) {
 					echo lang("sqlError");
+					console_log(mysqli_error($conn));
 				} else {
 					$row = mysqli_fetch_assoc($result);
 					if(mysqli_num_rows($result) == 0) {
-						array_push($_SESSION['alert'], "Postausta ei ole");
+						array_push($_SESSION['alert'], lang("errorEditPostNoPost"));
 						header("Location: index.php", true, 301);
 						exit();
 					} else {
@@ -179,16 +184,17 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 							$stmt = mysqli_stmt_init($conn);
 							if(!mysqli_stmt_prepare($stmt, $sql)) {
 								echo lang("sqlError");
+								console_log(mysqli_error($conn));
 							} else {
 								$content = clean($_POST['post-content']);
 								if (!isset($content) || strlen($content) <= 0) {
-									array_push($_SESSION['alert'], "Sisältöä ei ole asetettu!");
+									array_push($_SESSION['alert'], lang("errorEditPostNoContent"));
 								} else {
 									if (strlen($content) <= 10) {
-										array_push($_SESSION['alert'], "Viesti on liian lyhyt!");
+										array_push($_SESSION['alert'], lang("errorEditPostTooShort"));
 									}
 									if (strlen($content) >= 2500) {
-										array_push($_SESSION['alert'], "Viesti on liian pitkä!");
+										array_push($_SESSION['alert'], lang("errorEditPostTooLong"));
 									}
 								}
 								if (!empty($_SESSION['alert'])) {
@@ -197,7 +203,7 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 								} else {
 									mysqli_stmt_bind_param($stmt, "si", $content, $row['post_id']);
 									mysqli_stmt_execute($stmt);
-									array_push($_SESSION['notification'], "Viesti päivitetty!");
+									array_push($_SESSION['notification'], lang("editPostSuccesfully"));
 									header("Location: topic.php?id=".$row['post_topic'], true, 301);
 									exit();
 								}
@@ -208,17 +214,18 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 								$stmt = mysqli_stmt_init($conn);
 								if(!mysqli_stmt_prepare($stmt, $sql)) {
 									echo lang("sqlError");
+									console_log(mysqli_error($conn));
 								} else {
 									$content = clean($_POST['post-content']);
 
 									if (!isset($content) || strlen($content) <= 0) {
-										array_push($_SESSION['alert'], "Sisältöä ei ole asetettu!");
+										array_push($_SESSION['alert'], lang("errorEditPostNoContent"));
 									} else {
 										if (strlen($content) <= 10) {
-											array_push($_SESSION['alert'], "Viesti on liian lyhyt!");
+											array_push($_SESSION['alert'], lang("errorEditPostTooShort"));
 										}
 										if (strlen($content) >= 2500) {
-											array_push($_SESSION['alert'], "Viesti on liian pitkä!");
+											array_push($_SESSION['alert'], lang("errorEditPostTooLong"));
 										}
 									}
 									if (!empty($_SESSION['alert'])) {
@@ -227,7 +234,7 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 									} else {
 										mysqli_stmt_bind_param($stmt, "si", $content, $row['post_id']);
 										mysqli_stmt_execute($stmt);
-										array_push($_SESSION['notification'], "Viesti päivitetty!");
+										array_push($_SESSION['notification'], lang("editPostSuccesfully"));
 										header("Location: topic.php?id=".$row['post_topic'], true, 301);
 										exit();
 									}

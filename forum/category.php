@@ -8,25 +8,25 @@ $sql = "SELECT category_id, category_name, category_description FROM categories 
 $result = mysqli_query($conn, $sql);
 if(!$result) {
 	echo lang("sqlError");
+	console_log(mysqli_error($conn));
 } else {
 	//Tarkistetaan onko kategoriaa olemassa
 	if(mysqli_num_rows($result) == 0) {
-		echo 'Tätä kategoriaa ei ole olemassa!';
-		array_push($_SESSION['alert'], "Tätä kategoriaa ei ole olemassa");
+		array_push($_SESSION['alert'], lang("errorCategoryNotFound"));
 		header("Location: index.php", true, 301);
 		exit();
 	} else {
 		//Jos kategoria on olemassa niin ladataan sivulle aiheet
 		while ($row = mysqli_fetch_assoc($result)) {
-			echo "<h3>Aiheet '".clean($row['category_name'])."' kategoriassa</h3><br>";
+			echo "<h3>".sprintf(lang("topicList"), clean($row['category_name']))."' kategoriassa</h3><br>";
 		}
 		echo '<div class="content">';
 		//Tehdään prep statement aiheta ladatessa
 		$sql = "SELECT topic_id, topic_subject, topic_date, topic_category, topic_by FROM topics WHERE topic_category=?";
 		$stmt = mysqli_stmt_init($conn);
 		if(!mysqli_stmt_prepare($stmt, $sql)) {
-				console_log(mysqli_error($conn));
 			echo lang("sqlError");
+			console_log(mysqli_error($conn));
 		} else {
 			mysqli_stmt_bind_param($stmt, "i", $_GET['id']);
 			mysqli_stmt_execute($stmt);
@@ -37,14 +37,14 @@ if(!$result) {
 			} else {
 				//Tarkistetaan onko kategoriassa aiheita
 				if(mysqli_num_rows($result) == 0) {
-					echo "Tässä kategoriassa ei ole vielä aiheita!";
+					echo lang("errorEmptyCategory");
 				} else {
 					//Jos on niin tehdään oma table jonne tehdään aiheet
 					echo '<table border="1">
 						<tr>
-						<th>Aihe</th>
-						<th>Luotu</th>
-						<th>Käyttäjältä</th>
+						<th>'.lang("categoryTopicTitle").'</th>
+						<th>'.lang("categoryTopicCreated").'</th>
+						<th>'.lang("categoryTopicFrom").'</th>
 						</tr>';
 						//Loopataan kaikki aiheet kategoriassa
 					while($row = mysqli_fetch_assoc($result)) {
