@@ -76,8 +76,8 @@ if(!mysqli_stmt_prepare($stmt, $sql)) {
 							echo '<tr>';
 								echo '<td>';
 									echo '<form method="post" action="'.$url.'">';
-										echo '<textarea name="reply-content"></textarea> <br>';
-										echo '<input type="submit" value="'.lang("sendReplyButton").'" />';
+										echo '<textarea id="text_editor" name="reply-content"></textarea> <br>';
+										echo '<input class="link-button" type="submit" value="'.lang("sendReplyButton").'" />';
 									echo '</form>';
 								echo '</td>';
 							echo '</tr>';

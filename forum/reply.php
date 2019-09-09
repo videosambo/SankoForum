@@ -45,7 +45,7 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
     		echo lang("sqlError");
             console_log(mysqli_error($conn));
     	} else {
-    		$content = clean($_POST['reply-content']);
+    		$content = $_POST['reply-content'];
     		$id = clean($_GET['id']);
     		mysqli_stmt_bind_param($stmt, "sis", $content, $id, $_SESSION['user_id']);
 			mysqli_stmt_execute($stmt);

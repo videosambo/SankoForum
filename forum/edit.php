@@ -111,16 +111,16 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 								echo '<div class="content">';
 								echo '<form method="post" action="edit.php?type=post&id='.$row['post_id'].'">';
 									echo lang("editPostContent").'<br>';
-									echo '<textarea name="post-content" /></textarea>';
-									echo '<input type="submit" value="'.lang("editPostSubmit").'" />';
+									echo '<textarea id="text_editor" name="post-content" /></textarea>';
+									echo '<input class="link-button" type="submit" value="'.lang("editPostSubmit").'" />';
 								echo '</form>';
 							} else {
 								if($_SESSION['user_id'] == $row['post_by']) {
 									echo '<div class="content">';
 									echo '<form method="post" action="edit.php?type=post&id='.$row['post_id'].'">';
 										echo lang("editPostContent").'<br>';
-										echo '<textarea name="post-content" /></textarea>';
-										echo '<input type="submit" value="'.lang("editPostSubmit").'" />';
+										echo '<textarea id="text_editor" name="post-content" /></textarea>';
+										echo '<input class="link-button" type="submit" value="'.lang("editPostSubmit").'" />';
 									echo '</form>';
 								} else {
 									array_push($_SESSION['alert'], lang("errorEditPostOnlyOwn"));
@@ -186,7 +186,7 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 								echo lang("sqlError");
 								console_log(mysqli_error($conn));
 							} else {
-								$content = clean($_POST['post-content']);
+								$content = $_POST['post-content'];
 								if (!isset($content) || strlen($content) <= 0) {
 									array_push($_SESSION['alert'], lang("errorEditPostNoContent"));
 								} else {
@@ -216,7 +216,7 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 									echo lang("sqlError");
 									console_log(mysqli_error($conn));
 								} else {
-									$content = clean($_POST['post-content']);
+									$content = $_POST['post-content'];
 
 									if (!isset($content) || strlen($content) <= 0) {
 										array_push($_SESSION['alert'], lang("errorEditPostNoContent"));
