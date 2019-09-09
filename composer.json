@@ -1,0 +1,8 @@
+{
+    "name": "videosambo/sankoforum",
+    "description": "A silly forum engine made by videosambo",
+    "require": {
+        "php": "^7.3.2",
+        "videosambo/sankoforum": "1.*"
+    }
+}
