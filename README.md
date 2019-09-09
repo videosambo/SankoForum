@@ -22,7 +22,7 @@ Demo [https://forum.simpelecraft.tk](https://forum.simpelecraft.tk)
 - [x] Create sections, categoeies, topics and posts
 - [ ] Manage user information
 - [ ] Profile picture
-- [ ] Basic text formating
+- [x] Basic text formating
 - [x] Support for languages
 - [ ] Support for themes
 - [x] Basic configuration
