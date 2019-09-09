@@ -65,7 +65,7 @@ function lang($msg) {
 		"errorEditPostTooShort" => "Viesti on liian lyhyt!",
 		"errorEditPostTooLong" => "Viesti on liian pitkä!",
 		"editPostSuccesfully" => "Viesti päivitetty!",
-		"" => "",
+		"topicDeletedSuccesfully" => "Viestillä ei ollu enään aihetta, aihe poistettiin onnistuneesti!",
 		"" => "",
 
 		//Index and page content

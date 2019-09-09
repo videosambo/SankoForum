@@ -62,6 +62,19 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 										mysqli_stmt_bind_param($stmt, "ii", $_GET['id'], $_SESSION['user_id']);
 										mysqli_execute($stmt);
 										array_push($_SESSION['notification'], lang("editPostDeleteSuccesfully"));
+										$sql = "SELECT post_topic, post_id, post_by FROM posts WHERE post_topic=".$row['post_topic'];
+										$result = mysqli_query($conn, $sql);
+										if(!$result) {
+											echo lang("sqlError");
+											console_log(mysqli_error($conn));
+										} else {
+											if(mysqli_num_rows($result) == 0) {
+												//Aiheella ei ole enään postauksia, poistetaan aihe
+												$sql = "DELETE FROM topics WHERE topic_id=".$row['post_topic'];
+												$result = mysqli_query($conn, $sql);
+												array_push($_SESSION['notification'], lang("topicDeletedSuccesfully"));
+											}
+										}
 										header("Location: topic.php?id=".$row['post_topic'], true, 301);
 										exit();
 									}
@@ -77,10 +90,23 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 								if(!mysqli_stmt_prepare($stmt, $sql)) {
 									echo lang("sqlError");
 									console_log(mysqli_error($conn));
-									} else {
+								} else {
 									mysqli_stmt_bind_param($stmt, "ii", $_GET['id'], $row['post_by']);
 									mysqli_execute($stmt);
 									array_push($_SESSION['notification'], lang("editPostDeleteSuccesfully"));
+									$sql = "SELECT post_topic, post_id, post_by FROM posts WHERE post_topic=".$row['post_topic'];
+									$result = mysqli_query($conn, $sql);
+									if(!$result) {
+										echo lang("sqlError");
+										console_log(mysqli_error($conn));
+									} else {
+										if(mysqli_num_rows($result) == 0) {
+											//Aiheella ei ole enään postauksia, poistetaan aihe
+											$sql = "DELETE FROM topics WHERE topic_id=".$row['post_topic'];
+											$result = mysqli_query($conn, $sql);
+											array_push($_SESSION['notification'], lang("topicDeletedSuccesfully"));
+										}
+									}
 									header("Location: topic.php?id=".$row['post_topic'], true, 301);
 									exit();
 								}
@@ -138,7 +164,11 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 
 		//Topic =========================================================================================================================================
 		if(clean($_GET['type']) == "topic") {
-			
+			if($delete) {
+				$sql = "SELECT post_by, post_id, post_topic FROM posts WHERE post_id=?";
+			} else {
+
+			}
 		}
 		//Kategoria =========================================================================================================================================
 		if(clean($_GET['type']) == "category") {
