@@ -20,7 +20,7 @@ function makeForm() {
 		'.lang("signUpVerifyPassword").'<input type="password" name="user_pass_check"> <br>
 		'.lang("signUpEmailField").'<input type="email" name="user_email"> <br>
 		<div class="g-recaptcha" data-sitekey="'.getValue("recaptchaPublic").'"></div>
-		<input type="submit" value="'.lang("signUpCreateAccount").'" />
+		<input class="link-button" type="submit" value="'.lang("signUpCreateAccount").'" />
 		</form>';
 }
 include "header.php";

@@ -164,10 +164,133 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 
 		//Topic =========================================================================================================================================
 		if(clean($_GET['type']) == "topic") {
-			if($delete) {
-				$sql = "SELECT post_by, post_id, post_topic FROM posts WHERE post_id=?";
+			if ($delete) {
+				//Jos on niin vedetään siitä tiedot
+				$sql = "SELECT topic_id, topic_category, topic_subject, topic_by FROM topics WHERE topic_id=?";
+				$stmt = mysqli_stmt_init($conn);
+				if(!mysqli_stmt_prepare($stmt, $sql)) {
+					echo lang("sqlError");
+					console_log(mysqli_error($conn));
+				} else {
+					mysqli_stmt_bind_param($stmt, "i", $_GET['id']);
+					mysqli_stmt_execute($stmt);
+					$result = mysqli_stmt_get_result($stmt);
+					if (!$result) {
+						echo lang("sqlError");
+						console_log(mysqli_error($conn));
+					} else {
+						//Tarkistetaan onko aihetta olemassa
+						if(mysqli_num_rows($result) == 0) {
+							array_push($_SESSION['alert'], lang("errorEditTopicNoTopic"));
+							header("Location: index.php", true, 301);
+							exit();
+						} else {
+							//Jos on niin tarkistetaan sen tiedot
+							$row = mysqli_fetch_assoc($result);
+							//Tarkistetaan käyttäjän levu
+							if($_SESSION['user_level'] >= 1) {
+								$sql = "DELETE FROM topics WHERE topic_id=?";
+								$stmt = mysqli_stmt_init($conn);
+								if(!mysqli_stmt_prepare($stmt, $sql)) {
+									echo lang("sqlError");
+									console_log(mysqli_error($conn));
+								} else {
+									mysqli_stmt_bind_param($stmt, "i", $_GET['id']);
+									mysqli_execute($stmt);
+									array_push($_SESSION['notification'], lang("editTopicDeleteSuccesfully"));
+									$sql = "SELECT post_id FROM posts WHERE post_topic=".$row['topic_id'];
+									$result = mysqli_query($conn, $sql);
+									if(!$result) {
+										echo lang("sqlError");
+										console_log(mysqli_error($conn));
+									} else {
+										if(mysqli_num_rows($result) != 0) {
+											//Poistetaan aiheen postaukset
+											$sql = "DELETE FROM posts WHERE post_id=".$row['topic_id'];
+											$result = mysqli_query($conn, $sql);
+											array_push($_SESSION['notification'], lang("editTopicPostsDeletedSuccesfully"));
+										}
+									}
+									header("Location: category.php?id=".$row['topic_category'], true, 301);
+									exit();
+								}
+							} else {
+								if($row['topic_by'] == $_SESSION['user_id']) {
+									$sql = "DELETE FROM topics WHERE topic_id=?";
+									$stmt = mysqli_stmt_init($conn);
+									if(!mysqli_stmt_prepare($stmt, $sql)) {
+										echo lang("sqlError");
+										console_log(mysqli_error($conn));
+									} else {
+										mysqli_stmt_bind_param($stmt, "i", $_GET['id']);
+										mysqli_execute($stmt);
+										array_push($_SESSION['notification'], lang("editTopicDeleteSuccesfully"));
+										$sql = "SELECT post_id FROM posts WHERE post_topic=".$row['topic_id'];
+										$result = mysqli_query($conn, $sql);
+										if(!$result) {
+											echo lang("sqlError");
+											console_log(mysqli_error($conn));
+										} else {
+											if(mysqli_num_rows($result) != 0) {
+												//Poistetaan aiheen postaukset
+												$sql = "DELETE FROM posts WHERE post_id=".$row['topic_id'];
+												$result = mysqli_query($conn, $sql);
+												array_push($_SESSION['notification'], lang("editTopicPostsDeletedSuccesfully"));
+											}
+										}
+										header("Location: category.php?id=".$row['topic_category'], true, 301);
+										exit();
+									}
+								}
+							}
+						}
+					}
+				}
+				//Aiheen muokkaus
 			} else {
-
+				$sql = "SELECT topic_id, topic_category, topic_subject, topic_by FROM topics WHERE topic_id=?";
+				$stmt = mysqli_stmt_init($conn);
+				if(!mysqli_stmt_prepare($stmt, $sql)) {
+					echo lang("sqlError");
+					console_log(mysqli_error($conn));
+				} else {
+					mysqli_stmt_bind_param($stmt, "i", $_GET['id']);
+					mysqli_stmt_execute($stmt);
+					$result = mysqli_stmt_get_result($stmt);
+					if (!$result) {
+						echo lang("sqlError");
+						console_log(mysqli_error($conn));
+					} else { 
+						if(mysqli_num_rows($result) == 0) {
+							array_push($_SESSION['alert'], lang("errorEditTopicNoTopic"));
+							header("Location: index.php", true, 301);
+							exit();
+						} else {
+							$row = mysqli_fetch_assoc($result);
+							if($_SESSION['user_level'] >= 1) {
+								echo '<div class="content">';
+								echo '<form method="post" action="edit.php?type=topic&id='.$row['post_id'].'">';
+									echo lang("editPostContent").'<br>';
+									echo '<textarea id="text_editor" name="post-subject" /></textarea>';
+									echo '<input class="link-button" type="submit" value="'.lang("editPostSubmit").'" />';
+								echo '</form>';
+							} else {
+								if($_SESSION['user_id'] == $row['post_by']) {
+									echo '<div class="content">';
+									echo '<form method="post" action="edit.php?type=post&id='.$row['post_id'].'">';
+										echo lang("editPostContent").'<br>';
+										echo '<textarea id="text_editor" name="post-content" /></textarea>';
+										echo '<input class="link-button" type="submit" value="'.lang("editPostSubmit").'" />';
+									echo '</form>';
+								} else {
+									array_push($_SESSION['alert'], lang("errorEditPostOnlyOwn"));
+									header("Location: index.php", true, 301);
+									exit();	
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 		//Kategoria =========================================================================================================================================
@@ -277,6 +400,8 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 				}
 			}
 		}
+
+		//if ()
 	}
 }
 

@@ -66,6 +66,14 @@ function lang($msg) {
 		"errorEditPostTooLong" => "Viesti on liian pitkä!",
 		"editPostSuccesfully" => "Viesti päivitetty!",
 		"topicDeletedSuccesfully" => "Viestillä ei ollu enään aihetta, aihe poistettiin onnistuneesti!",
+		"errorEditTopicNoTopic" => "Aihetta ei ole",
+		"errorEditTopicLowLevel" => "Sinulla ei ole tarpeaksi isoa tasoa muokataksesi aihetta",
+		"editTopicDeleteSuccesfully" => "Aihe poistettu onnistuneesti",
+		"editTopicPostsDeletedSuccesfully" => "Aiheen viestit poistettu onnistuneesti",
+		"" => "",
+		"" => "",
+		"" => "",
+		"" => "",
 		"" => "",
 
 		//Index and page content
