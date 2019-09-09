@@ -3,6 +3,7 @@
   <a href="https://github.com/videosambo/SankoForum/releases/tag/1.0"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/videosambo/SankoForum"></a>
   <a href="https://github.com/videosambo/SankoForum/releases/tag/1.1"><img alt="GitHub tag (latest SemVer pre-release)" src="https://img.shields.io/github/v/tag/videosambo/sankoforum?include_prereleases"></a>
   <a href"https://www.php.net/"><img alt="php version" src="https://img.shields.io/badge/php-%5E7.3.2-green"></a>
+  <a href="https://libraries.io/github/videosambo/SankoForum"><img alt="Libraries.io dependency status for GitHub repo" src="https://img.shields.io/librariesio/github/videosambo/sankoforum"></a>
 </p>
 
 # Sanko Forum
