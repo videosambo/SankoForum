@@ -25,6 +25,7 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 		//Postaus =========================================================================================================================================
 		if(clean($_GET['type']) == "post") {
 			//Tarkistetaan onko kyseessä postauksen poistaminen
+			//Postauksen poistaminen
 			if ($delete) {
 				//Jos on niin vedetään siitä tiedot
 				$sql = "SELECT post_by, post_id, post_topic FROM posts WHERE post_id=?";
@@ -77,7 +78,7 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 									echo lang("sqlError");
 									console_log(mysqli_error($conn));
 									} else {
-									mysqli_stmt_bind_param($stmt, "ii", $_GET['id'], $_SESSION['user_id']);
+									mysqli_stmt_bind_param($stmt, "ii", $_GET['id'], $row['post_by']);
 									mysqli_execute($stmt);
 									array_push($_SESSION['notification'], lang("editPostDeleteSuccesfully"));
 									header("Location: topic.php?id=".$row['post_topic'], true, 301);
@@ -87,6 +88,7 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 						}
 					}
 				}
+				//Postauksen muokkaus
 			} else {
 				$sql = "SELECT post_by, post_id, post_topic, post_content FROM posts WHERE post_id=?";
 				$stmt = mysqli_stmt_init($conn);
