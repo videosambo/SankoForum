@@ -18,7 +18,7 @@ if(!$result) {
 	} else {
 		//Jos kategoria on olemassa niin ladataan sivulle aiheet
 		while ($row = mysqli_fetch_assoc($result)) {
-			echo "<h3>".sprintf(lang("topicList"), clean($row['category_name']))."' kategoriassa</h3><br>";
+			echo "<h3>".sprintf(lang("topicList"), clean($row['category_name']))."</h3><br>";
 		}
 		echo '<div class="content">';
 		//Tehdään prep statement aiheta ladatessa
@@ -55,6 +55,7 @@ if(!$result) {
 						echo '<tr>';
 							echo '<td class="leftpart" style="width: 50%;">';
 								$id = $row['topic_id'];
+								$category = $row['topic_category'];
 								echo '<h3><a href="topic.php?id=' .$id . '">' . clean($row['topic_subject']) . '</a><h3>';
 								if ($_SESSION['signed_in']) {
 									if ($row['topic_by'] == $_SESSION['user_id']) {

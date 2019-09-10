@@ -267,19 +267,35 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 							exit();
 						} else {
 							$row = mysqli_fetch_assoc($result);
+							$postId = $row['topic_id'];
+							//$content = clean($_POST['topic-subject']);
+							$sql = "SELECT category_name, category_id FROM categories";
+							$result = mysqli_query($conn, $sql);
 							if($_SESSION['user_level'] >= 1) {
 								echo '<div class="content">';
-								echo '<form method="post" action="edit.php?type=topic&id='.$row['post_id'].'">';
-									echo lang("editPostContent").'<br>';
-									echo '<textarea id="text_editor" name="post-subject" /></textarea>';
+								echo '<form method="post" action="edit.php?type=topic&id='.$postId.'">';
+									echo lang("edtiTopicCategory").'<br>';
+									echo '<select name="topic_category">';
+									while($row = mysqli_fetch_assoc($result)) {
+										echo '<option value="'.$row['category_id'].'">'.clean($row['category_name']).'</option> <br>';
+									}
+									echo '</select>';
+									echo '<br>'.lang("editPostContent").'<br>';
+									echo '<input type="text" name="topic-subject" />';
 									echo '<input class="link-button" type="submit" value="'.lang("editPostSubmit").'" />';
 								echo '</form>';
 							} else {
 								if($_SESSION['user_id'] == $row['post_by']) {
 									echo '<div class="content">';
-									echo '<form method="post" action="edit.php?type=post&id='.$row['post_id'].'">';
-										echo lang("editPostContent").'<br>';
-										echo '<textarea id="text_editor" name="post-content" /></textarea>';
+									echo '<form method="post" action="edit.php?type=post&id='.$postId.'">';
+										echo lang("edtiTopicCategory").'<br>';
+										echo '<select name="topic_category">';
+										while($row = mysqli_fetch_assoc($result)) {
+											echo '<option value="'.$row['category_id'].'">'.clean($row['category_name']).'</option> <br>';
+										}
+										echo '</select>';
+										echo '<br>'.lang("editPostContent").'<br>';
+										echo '<input type="text" name="topic-subject" />';
 										echo '<input class="link-button" type="submit" value="'.lang("editPostSubmit").'" />';
 									echo '</form>';
 								} else {
@@ -401,7 +417,101 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 			}
 		}
 
-		//if ()
+		if(clean($_GET['type']) == "topic") {
+			if (isset($_POST['topic_category'])) {
+				$sql = "SELECT topic_by, topic_id, topic_category FROM topics WHERE topic_id=?";
+				$stmt = mysqli_stmt_init($conn);
+				if(!mysqli_stmt_prepare($stmt, $sql)) {
+					echo lang("sqlError");
+					console_log(mysqli_error($conn));
+				} else {
+					mysqli_stmt_bind_param($stmt, "i", $_GET['id']);
+					mysqli_execute($stmt);
+					$result = mysqli_stmt_get_result($stmt);
+					if(!$result) {
+						echo lang("sqlError");
+						console_log(mysqli_error($conn));
+					} else {
+						$row = mysqli_fetch_assoc($result);
+						if(mysqli_num_rows($result) == 0) {
+							array_push($_SESSION['alert'], lang("errorEditTopicNoTopic"));
+							header("Location: index.php", true, 301);
+							exit();
+						} else {
+							if($_SESSION['user_level'] >= 1) {
+								$sql = "UPDATE topics SET topic_category = ?, topic_subject = ? WHERE topic_id = ?";
+								$stmt = mysqli_stmt_init($conn);
+								if(!mysqli_stmt_prepare($stmt, $sql)) {
+									echo lang("sqlError");
+									console_log(mysqli_error($conn));
+								} else {
+									if (!isset($_POST['topic_category']) || strlen($_POST['topic_category']) <= 0) {
+										array_push($_SESSION['alert'], lang("errorEditTopic"));
+									}
+									if (!isset($content) || strlen($content) <= 0) {
+										array_push($_SESSION['alert'], lang("errorEditPostNoContent"));
+									} else {
+										if (strlen($content) <= 10) {
+											array_push($_SESSION['alert'], lang("errorEditPostTooShort"));
+										}
+										if (strlen($content) >= 2500) {
+											array_push($_SESSION['alert'], lang("errorEditPostTooLong"));
+										}
+									}
+									if (!empty($_SESSION['alert'])) {
+										header("Location: edit.php?type=topic&id=".$row['topic_id'], true, 301);
+										exit();
+									} else {
+										mysqli_stmt_bind_param($stmt, "si", $content, $row['post_id']);
+										mysqli_stmt_execute($stmt);
+										array_push($_SESSION['notification'], lang("editTopicSuccesfully"));
+										header("Location: category.php?id=".$row['topic_category'], true, 301);
+										exit();
+									}
+								}
+							} else {
+								if($row['post_by'] == $_SESSION['user_id']) {
+									$sql = "UPDATE topics SET topic_category = ?, topic_subject = ? WHERE topic_id = ?";
+									$stmt = mysqli_stmt_init($conn);
+									if(!mysqli_stmt_prepare($stmt, $sql)) {
+										echo lang("sqlError");
+										console_log(mysqli_error($conn));
+									} else {
+										if (!isset($_POST['topic_category']) || strlen($_POST['topic_category']) <= 0) {
+											array_push($_SESSION['alert'], lang("errorEditTopic"));
+										}
+										if (!isset($content) || strlen($content) <= 0) {
+											array_push($_SESSION['alert'], lang("errorEditPostNoContent"));
+										} else {
+											if (strlen($content) <= 10) {
+												array_push($_SESSION['alert'], lang("errorEditPostTooShort"));
+											}
+											if (strlen($content) >= 2500) {
+												array_push($_SESSION['alert'], lang("errorEditPostTooLong"));
+											}
+										}
+										if (!empty($_SESSION['alert'])) {
+											header("Location: edit.php?type=topic&id=".$row['topic_id'], true, 301);
+											exit();
+										} else {
+											mysqli_stmt_bind_param($stmt, "si", $content, $row['post_id']);
+											mysqli_stmt_execute($stmt);
+											array_push($_SESSION['notification'], lang("editTopicSuccesfully"));
+											header("Location: category.php?id=".$row['topic_category'], true, 301);
+											exit();
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			} else {
+				array_push($_SESSION['alert'], lang("errorEditTopic"));
+				header("Location: edit.php?type=topic&id=".$row['topic_id'], true, 301);
+				exit();
+			}
+		}
 	}
 }
 
