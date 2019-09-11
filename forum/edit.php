@@ -477,30 +477,29 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 					if(!mysqli_stmt_prepare($stmt, $sql)) {
 						echo lang("sqlError");
 						console_log(mysqli_error($conn));
-					} else {
-						$content = $_POST['post-content'];
+						exit();
+					}
+					$content = $_POST['post-content'];
 
-						if (!isset($content) || strlen($content) <= 0) {
-							array_push($_SESSION['alert'], lang("errorEditPostNoContent"));
-						} else {
-							if (strlen($content) <= 10) {
-								array_push($_SESSION['alert'], lang("errorEditPostTooShort"));
-							}
-							if (strlen($content) >= 2500) {
-								array_push($_SESSION['alert'], lang("errorEditPostTooLong"));
-							}
+					if (!isset($content) || strlen($content) <= 0) {
+						array_push($_SESSION['alert'], lang("errorEditPostNoContent"));
+					} else {
+						if (strlen($content) <= 10) {
+							array_push($_SESSION['alert'], lang("errorEditPostTooShort"));
 						}
-						if (!empty($_SESSION['alert'])) {
-							header("Location: edit.php?type=post&id=".$row['post_id'], true, 301);
-							exit();
-						} else {
-							mysqli_stmt_bind_param($stmt, "si", $content, $row['post_id']);
-							mysqli_stmt_execute($stmt);
-							array_push($_SESSION['notification'], lang("editPostSuccesfully"));
-							header("Location: topic.php?id=".$row['post_topic'], true, 301);
-							exit();
+						if (strlen($content) >= 2500) {
+							array_push($_SESSION['alert'], lang("errorEditPostTooLong"));
 						}
 					}
+					if (!empty($_SESSION['alert'])) {
+						header("Location: edit.php?type=post&id=".$row['post_id'], true, 301);
+						exit();
+					}
+					mysqli_stmt_bind_param($stmt, "si", $content, $row['post_id']);
+					mysqli_stmt_execute($stmt);
+					array_push($_SESSION['notification'], lang("editPostSuccesfully"));
+					header("Location: topic.php?id=".$row['post_topic'], true, 301);
+					exit();
 				}
 			}
 		}
@@ -512,85 +511,84 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 				if(!mysqli_stmt_prepare($stmt, $sql)) {
 					echo lang("sqlError");
 					console_log(mysqli_error($conn));
+					exit();
+				}
+				mysqli_stmt_bind_param($stmt, "i", $_GET['id']);
+				mysqli_execute($stmt);
+				$result = mysqli_stmt_get_result($stmt);
+				if(!$result) {
+					echo lang("sqlError");
+					console_log(mysqli_error($conn));
+					exit();
 				} else {
-					mysqli_stmt_bind_param($stmt, "i", $_GET['id']);
-					mysqli_execute($stmt);
-					$result = mysqli_stmt_get_result($stmt);
-					if(!$result) {
-						echo lang("sqlError");
-						console_log(mysqli_error($conn));
-					} else {
-						$row = mysqli_fetch_assoc($result);
-						if(mysqli_num_rows($result) == 0) {
-							array_push($_SESSION['alert'], lang("errorEditTopicNoTopic"));
-							header("Location: index.php", true, 301);
+					$row = mysqli_fetch_assoc($result);
+					if(mysqli_num_rows($result) == 0) {
+						array_push($_SESSION['alert'], lang("errorEditTopicNoTopic"));
+						header("Location: index.php", true, 301);
+						exit();
+					}
+					if($_SESSION['user_level'] >= 1) {
+						$sql = "UPDATE topics SET topic_category = ?, topic_subject = ? WHERE topic_id = ?";
+						$stmt = mysqli_stmt_init($conn);
+						if(!mysqli_stmt_prepare($stmt, $sql)) {
+							echo lang("sqlError");
+							console_log(mysqli_error($conn));
 							exit();
 						} else {
-							if($_SESSION['user_level'] >= 1) {
-								$sql = "UPDATE topics SET topic_category = ?, topic_subject = ? WHERE topic_id = ?";
-								$stmt = mysqli_stmt_init($conn);
-								if(!mysqli_stmt_prepare($stmt, $sql)) {
-									echo lang("sqlError");
-									console_log(mysqli_error($conn));
-								} else {
-									if (!isset($_POST['topic_category']) || strlen($_POST['topic_category']) <= 0) {
-										array_push($_SESSION['alert'], lang("errorEditTopic"));
-									}
-									if (!isset($content) || strlen($content) <= 0) {
-										array_push($_SESSION['alert'], lang("errorEditPostNoContent"));
-									} else {
-										if (strlen($content) <= 10) {
-											array_push($_SESSION['alert'], lang("errorEditPostTooShort"));
-										}
-										if (strlen($content) >= 2500) {
-											array_push($_SESSION['alert'], lang("errorEditPostTooLong"));
-										}
-									}
-									if (!empty($_SESSION['alert'])) {
-										header("Location: edit.php?type=topic&id=".$row['topic_id'], true, 301);
-										exit();
-									} else {
-										mysqli_stmt_bind_param($stmt, "si", $content, $row['post_id']);
-										mysqli_stmt_execute($stmt);
-										array_push($_SESSION['notification'], lang("editTopicSuccesfully"));
-										header("Location: category.php?id=".$row['topic_category'], true, 301);
-										exit();
-									}
-								}
+							if (!isset($_POST['topic_category']) || strlen($_POST['topic_category']) <= 0) {
+								array_push($_SESSION['alert'], lang("errorEditTopic"));
+							}
+							if (!isset($content) || strlen($content) <= 0) {
+								array_push($_SESSION['alert'], lang("errorEditPostNoContent"));
 							} else {
-								if($row['post_by'] == $_SESSION['user_id']) {
-									$sql = "UPDATE topics SET topic_category = ?, topic_subject = ? WHERE topic_id = ?";
-									$stmt = mysqli_stmt_init($conn);
-									if(!mysqli_stmt_prepare($stmt, $sql)) {
-										echo lang("sqlError");
-										console_log(mysqli_error($conn));
-									} else {
-										if (!isset($_POST['topic_category']) || strlen($_POST['topic_category']) <= 0) {
-											array_push($_SESSION['alert'], lang("errorEditTopic"));
-										}
-										if (!isset($content) || strlen($content) <= 0) {
-											array_push($_SESSION['alert'], lang("errorEditPostNoContent"));
-										} else {
-											if (strlen($content) <= 10) {
-												array_push($_SESSION['alert'], lang("errorEditPostTooShort"));
-											}
-											if (strlen($content) >= 2500) {
-												array_push($_SESSION['alert'], lang("errorEditPostTooLong"));
-											}
-										}
-										if (!empty($_SESSION['alert'])) {
-											header("Location: edit.php?type=topic&id=".$row['topic_id'], true, 301);
-											exit();
-										} else {
-											mysqli_stmt_bind_param($stmt, "si", $content, $row['post_id']);
-											mysqli_stmt_execute($stmt);
-											array_push($_SESSION['notification'], lang("editTopicSuccesfully"));
-											header("Location: category.php?id=".$row['topic_category'], true, 301);
-											exit();
-										}
-									}
+								if (strlen($content) <= 10) {
+									array_push($_SESSION['alert'], lang("errorEditPostTooShort"));
+								}
+								if (strlen($content) >= 2500) {
+									array_push($_SESSION['alert'], lang("errorEditPostTooLong"));
 								}
 							}
+							if (!empty($_SESSION['alert'])) {
+								header("Location: edit.php?type=topic&id=".$row['topic_id'], true, 301);
+								exit();
+							}
+							mysqli_stmt_bind_param($stmt, "si", $content, $row['post_id']);
+							mysqli_stmt_execute($stmt);
+							array_push($_SESSION['notification'], lang("editTopicSuccesfully"));
+							header("Location: category.php?id=".$row['topic_category'], true, 301);
+							exit();
+						}
+					} else {
+						if($row['post_by'] == $_SESSION['user_id']) {
+							$sql = "UPDATE topics SET topic_category = ?, topic_subject = ? WHERE topic_id = ?";
+							$stmt = mysqli_stmt_init($conn);
+							if(!mysqli_stmt_prepare($stmt, $sql)) {
+								echo lang("sqlError");
+								console_log(mysqli_error($conn));
+								exit();
+							}
+							if (!isset($_POST['topic_category']) || strlen($_POST['topic_category']) <= 0) {
+								array_push($_SESSION['alert'], lang("errorEditTopic"));
+							}
+							if (!isset($content) || strlen($content) <= 0) {
+								array_push($_SESSION['alert'], lang("errorEditPostNoContent"));
+							} else {
+								if (strlen($content) <= 10) {
+									array_push($_SESSION['alert'], lang("errorEditPostTooShort"));
+								}
+								if (strlen($content) >= 2500) {
+									array_push($_SESSION['alert'], lang("errorEditPostTooLong"));
+								}
+							}
+							if (!empty($_SESSION['alert'])) {
+								header("Location: edit.php?type=topic&id=".$row['topic_id'], true, 301);
+								exit();
+							}
+							mysqli_stmt_bind_param($stmt, "si", $content, $row['post_id']);
+							mysqli_stmt_execute($stmt);
+							array_push($_SESSION['notification'], lang("editTopicSuccesfully"));
+							header("Location: category.php?id=".$row['topic_category'], true, 301);
+							exit();
 						}
 					}
 				}
