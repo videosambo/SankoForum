@@ -30,6 +30,8 @@ Demo [https://forum.simpelecraft.tk](https://forum.simpelecraft.tk)
 - [ ] Automatic update system
 - [ ] Instalation file with configuration
 - [ ] Private messages
+- [ ] Bootstrap style
+- [ ] Custom error pages
 
 ### SQL
 
