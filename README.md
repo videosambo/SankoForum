@@ -29,6 +29,7 @@ Demo [https://forum.simpelecraft.tk](https://forum.simpelecraft.tk)
 - [ ] Automatic SQL Database and table creation
 - [ ] Automatic update system
 - [ ] Instalation file with configuration
+- [ ] Automatic webserver configuration and support
 - [ ] Private messages
 - [ ] Bootstrap style
 - [ ] Custom error pages
