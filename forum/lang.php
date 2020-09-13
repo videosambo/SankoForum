@@ -8,7 +8,6 @@ function lang($msg) {
 		"moderator" => "Moderaattori",
 		"admin" => "Operaattori",
 		"clickHere" => "Click Here",
-
 		//Create category
 
 		"errorNoSection" => "Sinun pitää luoda sektio ennen kuin voit luoda kategorian",
@@ -65,6 +64,18 @@ function lang($msg) {
 		"errorEditPostTooShort" => "Viesti on liian lyhyt!",
 		"errorEditPostTooLong" => "Viesti on liian pitkä!",
 		"editPostSuccesfully" => "Viesti päivitetty!",
+		"topicDeletedSuccesfully" => "Viestillä ei ollu enään aihetta, aihe poistettiin onnistuneesti!",
+		"errorEditTopicNoTopic" => "Aihetta ei ole",
+		"errorEditTopicLowLevel" => "Sinulla ei ole tarpeaksi isoa tasoa muokataksesi aihetta",
+		"editTopicDeleteSuccesfully" => "Aihe poistettu onnistuneesti",
+		"editTopicPostsDeletedSuccesfully" => "Aiheen viestit poistettu onnistuneesti",
+		"edtiTopicCategory" => "Aiheen kategoria: ",
+		"errorEditTopic" => "Aiheelle ei ole asetettu kategoriaa",
+		"editTopicSuccesfully" => "Aihe päivitetty!",
+		"errorEditCategoryNoCategory" => "Kategoriaa ei ole",
+		"editCategoryDeleteSuccesfully" => "Kategoria poistettu onnistuneesti",
+		"errorEditCategoryLowLevel" => "Sinulla ei ole tarpeaksi isoa tasoa muokataksesi kategoria",
+		"" => "",
 		"" => "",
 		"" => "",
 

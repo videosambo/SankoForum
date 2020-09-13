@@ -13,8 +13,8 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 				echo '<div class="content">';
 				echo "<form method='post' action=''>
 					".lang("sectionName")."<input type='text' name='section_name' /> <br>
-					".lang("sectionDescription")."<br><textarea name='section_description' /></textarea> <br>
-					<input type='submit' value='".lang("addSection")."' />
+					".lang("sectionDescription")."<input type='text' name='section_description' /> <br>
+					<input class='link-button' type='submit' value='".lang("addSection")."' />
 					</form>";
 				echo '</div>';
 			} else {

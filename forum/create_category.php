@@ -30,8 +30,8 @@ if($_SERVER['REQUEST_METHOD'] != 'POST'){
 							}
 							echo "</select><br>";
 							echo lang("categoryName")."<input type='text' name='category_name' /> <br>";
-							echo lang("categoryDescription")."<br><textarea name='category_description' /></textarea> <br>";
-							echo "<input type='submit' value='".lang("addCategory")."' />";
+							echo lang("categoryDescription")."<input type='text' name='category_description' /> <br>";
+							echo "<input class='link-button' type='submit' value='".lang("addCategory")."' />";
 						echo "</form>";
 					echo '</div>';
 					}

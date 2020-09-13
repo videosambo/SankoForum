@@ -16,7 +16,7 @@ if(isset($_SESSION['signed_in']) && $_SESSION['signed_in'] == true) {
 		echo '<form method="post" action="">
 			'.lang("usernameOrEmail").'<input type="text" name="user" />
 			'.lang("passwordField").'<input type="password" name="user_pass">
-			<input type="submit" value="'.lang("signInButton").'" />
+			<input class="link-button" type="submit" value="'.lang("signInButton").'" />
 			</form>';
 	} else {
 		//Tää koodi suorittautuu jos formi lähetetään

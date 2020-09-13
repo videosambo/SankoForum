@@ -1,4 +1,5 @@
 body {
+    font-family: Arial, Helvetica, sans-serif;
     background-color: #4E4E4E;
     text-align: center;
  }
@@ -13,7 +14,6 @@ body {
     border: 1px solid #000;
     border-top: none;
     float: left;
-    font-family: Arial;
     padding: 20px 30px;
     text-align: left;
     width: 100%;
@@ -71,25 +71,21 @@ th {
 td {
     padding: 5px;
 }
- 
-h1, #footer {
-    font-family: Arial;
-    color: #F1F3F1;
+
+input[type=text] input[type=password] input[type=email] {
+    border: 1px solid #ccc;
+    border-radius: 2px;
 }
 
-h2 {
-    font-family: Arial;
+#header, #footer {
     color: #F1F3F1;
 }
- 
-h3 {margin: 0; padding: 0;}
  
 .item {
     background-color: #00728B;
     border: 1px solid #032472;
     border-radius: 5px;
     color: #FFF;
-    font-family: Arial;
     padding: 3px;
     padding-top: 5px;
     text-decoration: none;
@@ -101,14 +97,26 @@ h3 {margin: 0; padding: 0;}
     margin-right: 5px;
     border-radius: 5px;
     color: #FFF;
-    font-family: Arial;
     padding: 3px;
     text-decoration: none;
 }
 
-.link-button a:hover {
+.link-button:hover {
     background-color: #009FC1;
     padding: 5px;
+}
+
+.link-button1 {
+    background-color: #00728B;
+    border: 1px solid #032472;
+    margin-right: 5px;
+    border-radius: 5px;
+    color: #FFF;
+    text-decoration: none;
+}
+
+.link-button1:hover {
+    background-color: #009FC1;
 }
  
 .leftpart {
@@ -199,11 +207,11 @@ textarea {
 }
 
 #notifications {
-	font-family: Arial;
-	pointer-events:all;
-	position: absolute;
-	top: 5%;
-	right: 10%;
-	width: 30%;
-	height: 80%;
+    font-family: Arial;
+    pointer-events:all;
+    position: absolute;
+    top: 5%;
+    right: 10%;
+    width: 30%;
+    height: 80%;
 }

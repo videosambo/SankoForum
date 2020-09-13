@@ -45,8 +45,8 @@ if($_SESSION['signed_in'] == false) {
 						}
 					}
 					echo '</select> <br>';
-					echo lang("topicMessage").'<textarea name="post_content" /></textarea> <br>';
-					echo '<input type="submit" value="'.lang("createTopic").'" />';
+					echo lang("topicMessage").'<textarea id="text_editor" name="post_content" /></textarea> <br>';
+					echo '<input class="link-button" type="submit" value="'.lang("createTopic").'" />';
 				echo '</form>';
 				echo '</div>';
 			}
@@ -101,7 +101,7 @@ if($_SESSION['signed_in'] == false) {
 					console_log(mysqli_error($conn));
 					echo lang("sqlError");
 				} else {
-					$content = clean($_POST['post_content']);
+					$content = $_POST['post_content'];
 					mysqli_stmt_bind_param($stmt, "sis", $content, $topicid, $_SESSION['user_id']);
 					mysqli_stmt_execute($stmt);
 					array_push($_SESSION['notification'], lang("succesfullyCreatedTopic"));

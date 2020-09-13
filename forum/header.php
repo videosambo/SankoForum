@@ -55,8 +55,9 @@ if(!isset($_SESSION['signed_in'])) $_SESSION['signed_in'] = false;
 <html>
 	<head>
 		<title>Sankon Foorumit MK2</title>
-		<link rel="stylesheet" href="css/style.css" type="text/css">
+		<link rel="stylesheet" href="css/default_theme.css" type="text/css">
 		<script>
+
 			function checkNotifications() {
 				if (!document.getElementById('notifications').hasChildNodes()) {
 					document.getElementById('notifications').remove();
@@ -66,8 +67,7 @@ if(!isset($_SESSION['signed_in'])) $_SESSION['signed_in'] = false;
 		<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 	</head>
 	<body>
-		<h1>Videosambon toiset foorumit</h1>
-		<h1>Entiset olivat aivan paskat</h1>
+		<h1 id="header">Videosambon toiset foorumit</h1>
 		<div id="wrapper">	<!-- Start of wrapper -->
 			<div id="menu">	<!-- Start of menu bar -->
 				<?php

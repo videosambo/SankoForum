@@ -18,7 +18,7 @@ if(!$result) {
 	} else {
 		//Jos kategoria on olemassa niin ladataan sivulle aiheet
 		while ($row = mysqli_fetch_assoc($result)) {
-			echo "<h3>".sprintf(lang("topicList"), clean($row['category_name']))."' kategoriassa</h3><br>";
+			echo "<h3>".sprintf(lang("topicList"), clean($row['category_name']))."</h3><br>";
 		}
 		echo '<div class="content">';
 		//Tehdään prep statement aiheta ladatessa
@@ -54,7 +54,18 @@ if(!$result) {
 						//Tehdään table rowi sille
 						echo '<tr>';
 							echo '<td class="leftpart" style="width: 50%;">';
-								echo '<h3><a href="topic.php?id=' . $row['topic_id'] . '">' . clean($row['topic_subject']) . '</a><h3>';
+								$id = $row['topic_id'];
+								$category = $row['topic_category'];
+								echo '<h3><a href="topic.php?id=' .$id . '">' . clean($row['topic_subject']) . '</a><h3>';
+								if ($_SESSION['signed_in']) {
+									if ($row['topic_by'] == $_SESSION['user_id']) {
+										echo '<a class="link-button" href="edit.php?type=topic&delete=true&id='.$id.'">Poista</a>';
+										echo '<a class="link-button" href="edit.php?type=topic&id='.$id.'">Muokkaa</a>';
+									} elseif ($_SESSION['user_level'] >= 1) {
+										echo '<a class="link-button" href="edit.php?type=topic&delete=true&id='.$id.'">Poista</a>';
+										echo '<a class="link-button" href="edit.php?type=topic&id='.$id.'">Muokkaa</a>';
+									}
+								}
 							echo '</td>';
 							echo '<td class="rightpart" style="width: 20%;">';
 								echo date('d-m-Y', strtotime($row['topic_date'])) . "<br>";
