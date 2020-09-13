@@ -18,10 +18,12 @@ function makeForm() {
 		'.lang("signUpUsername").'<input type="text" name="user_name" /> <br>
 		'.lang("passwordField").'<input type="password" name="user_pass"> <br>
 		'.lang("signUpVerifyPassword").'<input type="password" name="user_pass_check"> <br>
-		'.lang("signUpEmailField").'<input type="email" name="user_email"> <br>
-		<div class="g-recaptcha" data-sitekey="'.getValue("recaptchaPublic").'"></div>
-		<input type="submit" value="'.lang("signUpCreateAccount").'" />
-		</form>';
+		'.lang("signUpEmailField").'<input type="email" name="user_email"> <br>';
+		if (getValue("enableRecaptcha")) {
+			echo '<div class="g-recaptcha" data-sitekey="'.getValue("recaptchaPublic").'"></div>';
+		}
+		echo '<input type="submit" value="'.lang("signUpCreateAccount").'" />';
+		echo '</form>';
 }
 include "header.php";
 
@@ -94,18 +96,20 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 	}
 
 	//RecatchaV2
-	$recaptcha_response = $_POST['g-recaptcha-response'];
-	if(strlen($recaptcha_response) != 0 && !empty($recaptcha_response)) {
-		$secret = getValue("recaptchaSecret");
-        $verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$recaptcha_response);
-        $responseData = json_decode($verifyResponse);
-        echo $responseData;
-        if(!$responseData->success){
-            array_push($_SESSION['alert'], lang("errorSignUpVerifyRecaptcha"));
-            exit();
-        }
-	} else {
-		array_push($_SESSION['alert'], lang("errorSignUpRecaptcha"));
+	if (getValue("enableRecaptcha")) {
+		$recaptcha_response = $_POST['g-recaptcha-response'];
+		if(strlen($recaptcha_response) != 0 && !empty($recaptcha_response)) {
+			$secret = getValue("recaptchaSecret");
+			$verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$recaptcha_response);
+			$responseData = json_decode($verifyResponse);
+			echo $responseData;
+			if(!$responseData->success){
+				array_push($_SESSION['alert'], lang("errorSignUpVerifyRecaptcha"));
+				exit();
+			}
+		} else {
+			array_push($_SESSION['alert'], lang("errorSignUpRecaptcha"));
+		}
 	}
 
 	//Katsotaan että menikö kaikki hyvin

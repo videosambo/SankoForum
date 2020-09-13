@@ -1,12 +1,13 @@
 <?php
 function getValue($field) {
 	$fields = array(
+		"enableRecaptcha" => false,
 		"recaptchaSecret" => "SECRET_KEY",
 		"recaptchaPublic" => "PUBLIC_KEY",
 		"sqlServer" => "localhost:3306",
 		"sqlUsername" => "sql_user",
 		"sqlPassword" => "sql_password",
-		"sqlDatabase" => "USE database",
+		"sqlDatabase" => "forum",
 		"SMTPUser" => "gmail_account",
 		"SMTPPassword" => "gmail_password",
 		"SMTPHost" => "smtp.gmail.com",
