@@ -48,7 +48,13 @@ if(!$result) {
 					//Sitten tehdään postauksesta table
 					echo '<tr>';
 						echo '<td class="leftpart">';
-							echo '<h3><a href="category.php?id=' . $categoryRow['category_id'] . '">' . clean($categoryRow['category_name']) . '</a></h3> <a style="float: right;" class="link-button" href="edit.php?type=category&delete=true&id='.$categoryRow['category_id'].'">Poista</a><a style="float: right;" class="link-button" href="edit.php?type=category&id='.$categoryRow['category_id'].'">Muokkaa</a>' . $categoryRow['category_description'];
+							echo '<h3><a href="category.php?id=' . $categoryRow['category_id'] . '">'.clean($categoryRow['category_name']) . '</a></h3> ';
+							//Jos käyttäjä on admin ja kirjautunu sisälle niin annetaan mahdollisuudet poistaa jotain paskaa tästä
+							if ($_SESSION['signed_in'] && $_SESSION['user_level'] >= 2) {
+								echo '<a style="float: right;" class="link-button" href="edit.php?type=category&delete=true&id='.$categoryRow['category_id'].'">'.lang("deleteButton").'</a>';
+								echo'<a style="float: right;" class="link-button" href="edit.php?type=category&id='.$categoryRow['category_id'].'">'.lang("editButton").'</a>';
+							}
+							echo $categoryRow['category_description'];
 						echo '</td>';
 						echo '<td class="rightpart">';
 							echo $latest;
