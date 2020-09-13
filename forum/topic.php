@@ -58,11 +58,11 @@ if(!mysqli_stmt_prepare($stmt, $sql)) {
 									<p> ' . date("h:i:s", strtotime($row['post_date'])) . '</p>';
 									if ($_SESSION['signed_in'] == true) {
 										if ($_SESSION['user_level'] >= 1) {
-											echo '<a class="link-button" href="edit.php?type=post&id='.$row['post_id'].'&delete=true">'.lang("deleteButton").'</a>';
-											echo '<a class="link-button" href="edit.php?type=post&id='.$row['post_id'].'">'.lang("editButton").'</a>';
+											echo '<a class="link-button" href="edit_post.php?id='.$row['post_id'].'&delete=true">'.lang("deleteButton").'</a>';
+											echo '<a class="link-button" href="edit_post.php?id='.$row['post_id'].'">'.lang("editButton").'</a>';
 										} else if ($_SESSION['user_id'] == $row['post_by']) {
-											echo '<a class="link-button" href="edit.php?type=post&id='.$row['post_id'].'&delete=true">'.lang("deleteButton").'</a>';
-											echo '<a class="link-button" href="edit.php?type=post&id='.$row['post_id'].'">'.lang("editButton").'</a>';
+											echo '<a class="link-button" href="edit_post.php?id='.$row['post_id'].'&delete=true">'.lang("deleteButton").'</a>';
+											echo '<a class="link-button" href="edit_post.php?id='.$row['post_id'].'">'.lang("editButton").'</a>';
 										}
 									}
 								echo '</td>';

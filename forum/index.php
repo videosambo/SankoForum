@@ -51,8 +51,8 @@ if(!$result) {
 							echo '<h3><a href="category.php?id=' . $categoryRow['category_id'] . '">'.clean($categoryRow['category_name']) . '</a></h3> ';
 							//Jos käyttäjä on admin ja kirjautunu sisälle niin annetaan mahdollisuudet poistaa jotain paskaa tästä
 							if ($_SESSION['signed_in'] && $_SESSION['user_level'] >= 2) {
-								echo '<a style="float: right;" class="link-button" href="edit.php?type=category&delete=true&id='.$categoryRow['category_id'].'">'.lang("deleteButton").'</a>';
-								echo'<a style="float: right;" class="link-button" href="edit.php?type=category&id='.$categoryRow['category_id'].'">'.lang("editButton").'</a>';
+								echo '<a style="float: right;" class="link-button" href="edit_category.php?delete=true&id='.$categoryRow['category_id'].'">'.lang("deleteButton").'</a>';
+								echo'<a style="float: right;" class="link-button" href="edit_category.php?id='.$categoryRow['category_id'].'">'.lang("editButton").'</a>';
 							}
 							echo $categoryRow['category_description'];
 						echo '</td>';

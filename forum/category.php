@@ -59,11 +59,11 @@ if(!$result) {
 								echo '<h3><a href="topic.php?id=' .$id . '">' . clean($row['topic_subject']) . '</a><h3>';
 								if ($_SESSION['signed_in']) {
 									if ($row['topic_by'] == $_SESSION['user_id']) {
-										echo '<a class="link-button" href="edit.php?type=topic&delete=true&id='.$id.'">Poista</a>';
-										echo '<a class="link-button" href="edit.php?type=topic&id='.$id.'">Muokkaa</a>';
+										echo '<a class="link-button" href="edit_topic.php?delete=true&id='.$id.'">Poista</a>';
+										echo '<a class="link-button" href="edit_topic.php?id='.$id.'">Muokkaa</a>';
 									} elseif ($_SESSION['user_level'] >= 1) {
-										echo '<a class="link-button" href="edit.php?type=topic&delete=true&id='.$id.'">Poista</a>';
-										echo '<a class="link-button" href="edit.php?type=topic&id='.$id.'">Muokkaa</a>';
+										echo '<a class="link-button" href="edit_topic.php?delete=true&id='.$id.'">Poista</a>';
+										echo '<a class="link-button" href="edit_topic.php?id='.$id.'">Muokkaa</a>';
 									}
 								}
 							echo '</td>';

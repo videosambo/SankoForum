@@ -180,6 +180,7 @@ function lang($msg) {
 		"topicList" => "Aiheet '%s' kategoriassa",
 		"errorEmptyCategory" => "Tässä kategoriassa ei ole vielä aiheita!",
 		"categoryTopicTitle" => "Aihe",
+		"categorySection" => "kategorian sektio",
 		"categoryTopicCreated" => "Luotu",
 		"categoryTopicFrom" => "Käyttäjältä",
 
