@@ -75,6 +75,8 @@ function lang($msg) {
 		"errorEditCategoryNoCategory" => "Kategoriaa ei ole",
 		"editCategoryDeleteSuccesfully" => "Kategoria poistettu onnistuneesti",
 		"errorEditCategoryLowLevel" => "Sinulla ei ole tarpeaksi isoa tasoa muokataksesi kategoria",
+		"editCategoryHeader" => "Otsikko",
+		"editCategoryDescription" => "Kuvaus",
 		"" => "",
 		"" => "",
 		"" => "",
@@ -179,7 +181,13 @@ function lang($msg) {
 		"errorEmptyCategory" => "Tässä kategoriassa ei ole vielä aiheita!",
 		"categoryTopicTitle" => "Aihe",
 		"categoryTopicCreated" => "Luotu",
-		"categoryTopicFrom" => "Käyttäjältä"
+		"categoryTopicFrom" => "Käyttäjältä",
+
+		//Section
+
+		"errorSectionNotFound" => "Tätä sektiota ei ole olemassa!",
+		"editSectionDeleteSuccesfully" => "Sektio poistettu onnistuneesti",
+		"errorEditSectionLowLevel" => "Sinulla ei ole tarpeaksi isoa tasoa muokataksesi sektioita"
 	);
 	
 	return $message[$msg];

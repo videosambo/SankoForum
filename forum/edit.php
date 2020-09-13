@@ -22,6 +22,19 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 		$delete = false;
 	}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 	//Postaus =========================================================================================================================================
 	if(clean($_GET['type']) == "post") {
 		//Tarkistetaan onko kyseessä postauksen poistaminen
@@ -160,6 +173,22 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 			}
 		}
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	//Topic =========================================================================================================================================
 	if(clean($_GET['type']) == "topic") {
@@ -309,6 +338,17 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 	//Kategoria =========================================================================================================================================
 	if(clean($_GET['type']) == "category") {
 		//Tarkistetaan onko kyseessä kategorian poistaminen
@@ -382,9 +422,9 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 			$row = mysqli_fetch_assoc($result);
 			if($_SESSION['user_level'] >= 1) {
 				echo '<div class="content">';
-				echo '<form method="post" action="edit.php?type=post&id='.$row['post_id'].'">';
-					echo lang("editPostContent").'<br>';
-					echo '<textarea id="text_editor" name="post-content" /></textarea>';
+				echo '<form method="post" action="edit.php?type=category&id='.$row['category_id'].'">';
+					echo lang("editCategoryHeader").': <input type="text" name="category_name" /> <br>';
+					echo lang("editCategoryDescription").': <input type="text" name="category_description" /> <br>';
 					echo '<input class="link-button" type="submit" value="'.lang("editPostSubmit").'" />';
 				echo '</form>';
 			} else {
@@ -406,8 +446,111 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 
 	//Sektio =========================================================================================================================================
 	if(clean($_GET['type']) == "section") {
-		
+		//Tarkistetaan onko kyseessä sektion poistaminen
+		//SEktion poistaminen
+		if ($delete) {
+			//Jos on niin vedetään siitä tiedot
+			$sql = "SELECT * FROM sections WHERE section_id=?";
+			$stmt = mysqli_stmt_init($conn);
+			if(!mysqli_stmt_prepare($stmt, $sql)) {
+				echo lang("sqlError");
+				console_log(mysqli_error($conn));
+				exit();
+			}
+			mysqli_stmt_bind_param($stmt, "i", $_GET['id']);
+			mysqli_stmt_execute($stmt);
+			$result = mysqli_stmt_get_result($stmt);
+			if (!$result) {
+				echo lang("sqlError");
+				console_log(mysqli_error($conn));
+				exit();
+			}
+			//Tarkistetaan onko kategoriaa olemassa
+			if(mysqli_num_rows($result) == 0) {
+				array_push($_SESSION['alert'], lang("errorSectionNotFound"));
+				header("Location: index.php", true, 301);
+				exit();
+			}
+			//Jos on niin tarkistetaan sen tiedot
+			$row = mysqli_fetch_assoc($result);
+			//Tarkistetaan käyttäjän levu
+			if($_SESSION['user_level'] <= 2) {
+				array_push($_SESSION['alert'], lang("errorEditSectionLowLevel"));
+				header("Location: index.php", true, 301);
+				exit();
+			} else {
+				$sql = "DELETE FROM sections WHERE section_id=?";
+				$stmt = mysqli_stmt_init($conn);
+				if(!mysqli_stmt_prepare($stmt, $sql)) {
+					echo lang("sqlError");
+					console_log(mysqli_error($conn));
+					exit();
+				}
+				mysqli_stmt_bind_param($stmt, "i", $_GET['id']);
+				mysqli_execute($stmt);
+				array_push($_SESSION['notification'], lang("editSectionDeleteSuccesfully"));
+				header("Location: index.php", true, 301);
+				exit();
+			}
+			//Sektion muokkaus
+		} else {
+			$sql = "SELECT * FROM categories WHERE category_id=?";
+			$stmt = mysqli_stmt_init($conn);
+			if(!mysqli_stmt_prepare($stmt, $sql)) {
+				echo lang("sqlError");
+				console_log(mysqli_error($conn));
+				exit();
+			}
+			mysqli_stmt_bind_param($stmt, "i", $_GET['id']);
+			mysqli_stmt_execute($stmt);
+			$result = mysqli_stmt_get_result($stmt);
+			if (!$result) {
+				echo lang("sqlError");
+				console_log(mysqli_error($conn));
+				exit();
+			}
+			if(mysqli_num_rows($result) == 0) {
+				array_push($_SESSION['alert'], lang("errorEditPostNoPost"));
+				header("Location: index.php", true, 301);
+				exit();
+			}
+			$row = mysqli_fetch_assoc($result);
+			if($_SESSION['user_level'] >= 2) {
+				echo '<div class="content">';
+				echo '<form method="post" action="edit.php?type=section&id='.$row['section_id'].'">';
+					echo lang("editPostContent").'<br>';
+					echo '<textarea id="text_editor" name="post-content" /></textarea>';
+					echo '<input class="link-button" type="submit" value="'.lang("editPostSubmit").'" />';
+				echo '</form>';
+			} else {
+				if($_SESSION['user_id'] != $row['post_by']) {
+					array_push($_SESSION['alert'], lang("errorEditPostOnlyOwn"));
+					header("Location: index.php", true, 301);
+					exit();	
+				}
+				echo '<div class="content">';
+				echo '<form method="post" action="edit.php?type=post&id='.$row['post_id'].'">';
+					echo lang("editPostContent").'<br>';
+					echo '<textarea id="text_editor" name="post-content" /></textarea>';
+					echo '<input class="link-button" type="submit" value="'.lang("editPostSubmit").'" />';
+				echo '</form>';
+			}
+		}
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	//User =========================================================================================================================================
 	if(clean($_GET['type']) == "user") {
 		
@@ -419,6 +562,28 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 		header("Location: index.php", true, 301);
 		exit();
 	} else {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		//Post =========================================================================================================================================
 		if(clean($_GET['type']) == "post") {
 			$sql = "SELECT post_by, post_id, post_topic FROM posts WHERE post_id=?";
@@ -503,6 +668,9 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 				}
 			}
 		}
+
+
+
 
 		if(clean($_GET['type']) == "topic") {
 			if (isset($_POST['topic_category'])) {
@@ -598,6 +766,104 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 				exit();
 			}
 		}
+
+		if(clean($_GET['type']) == "category") {
+			if (isset($_POST['category_name'])) {
+				$sql = "SELECT * FROM topics WHERE category_id=?";
+				$stmt = mysqli_stmt_init($conn);
+				if(!mysqli_stmt_prepare($stmt, $sql)) {
+					echo lang("sqlError");
+					console_log(mysqli_error($conn));
+					exit();
+				}
+				mysqli_stmt_bind_param($stmt, "i", $_GET['id']);
+				mysqli_execute($stmt);
+				$result = mysqli_stmt_get_result($stmt);
+				if(!$result) {
+					echo lang("sqlError");
+					console_log(mysqli_error($conn));
+					exit();
+				} else {
+					$row = mysqli_fetch_assoc($result);
+					if(mysqli_num_rows($result) == 0) {
+						array_push($_SESSION['alert'], lang("errorEditTopicNoTopic"));
+						header("Location: index.php", true, 301);
+						exit();
+					}
+					if($_SESSION['user_level'] >= 1) {
+						$sql = "UPDATE categories SET category_section = ?, category_name = ?, category_description = ? WHERE category_id = ?";
+						$stmt = mysqli_stmt_init($conn);
+						if(!mysqli_stmt_prepare($stmt, $sql)) {
+							echo lang("sqlError");
+							console_log(mysqli_error($conn));
+							exit();
+						} else {
+							if (!isset($_POST['category_section']) || strlen($_POST['category_section']) <= 0) {
+								array_push($_SESSION['alert'], lang("errorEditTopic"));
+							}
+							if (!isset($content) || strlen($content) <= 0) {
+								array_push($_SESSION['alert'], lang("errorEditPostNoContent"));
+							} else {
+								if (strlen($content) <= 10) {
+									array_push($_SESSION['alert'], lang("errorEditPostTooShort"));
+								}
+								if (strlen($content) >= 2500) {
+									array_push($_SESSION['alert'], lang("errorEditPostTooLong"));
+								}
+							}
+							if (!empty($_SESSION['alert'])) {
+								header("Location: edit.php?type=topic&id=".$row['topic_id'], true, 301);
+								exit();
+							}
+							mysqli_stmt_bind_param($stmt, "si", $content, $row['post_id']);
+							mysqli_stmt_execute($stmt);
+							array_push($_SESSION['notification'], lang("editTopicSuccesfully"));
+							header("Location: category.php?id=".$row['topic_category'], true, 301);
+							exit();
+						}
+					} else {
+						if($row['post_by'] == $_SESSION['user_id']) {
+							$sql = "UPDATE topics SET topic_category = ?, topic_subject = ? WHERE topic_id = ?";
+							$stmt = mysqli_stmt_init($conn);
+							if(!mysqli_stmt_prepare($stmt, $sql)) {
+								echo lang("sqlError");
+								console_log(mysqli_error($conn));
+								exit();
+							}
+							if (!isset($_POST['topic_category']) || strlen($_POST['topic_category']) <= 0) {
+								array_push($_SESSION['alert'], lang("errorEditTopic"));
+							}
+							if (!isset($content) || strlen($content) <= 0) {
+								array_push($_SESSION['alert'], lang("errorEditPostNoContent"));
+							} else {
+								if (strlen($content) <= 10) {
+									array_push($_SESSION['alert'], lang("errorEditPostTooShort"));
+								}
+								if (strlen($content) >= 2500) {
+									array_push($_SESSION['alert'], lang("errorEditPostTooLong"));
+								}
+							}
+							if (!empty($_SESSION['alert'])) {
+								header("Location: edit.php?type=topic&id=".$row['topic_id'], true, 301);
+								exit();
+							}
+							mysqli_stmt_bind_param($stmt, "si", $content, $row['post_id']);
+							mysqli_stmt_execute($stmt);
+							array_push($_SESSION['notification'], lang("editTopicSuccesfully"));
+							header("Location: category.php?id=".$row['topic_category'], true, 301);
+							exit();
+						}
+					}
+				}
+			} else {
+				array_push($_SESSION['alert'], lang("errorEditTopic"));
+				header("Location: edit.php?type=topic&id=".$row['topic_id'], true, 301);
+				exit();
+			}
+		}
+
+
+
 	}
 }
 
