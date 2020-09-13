@@ -6,7 +6,7 @@ function getValue($field) {
 		"sqlServer" => "localhost:3306",
 		"sqlUsername" => "sql_user",
 		"sqlPassword" => "sql_password",
-		"sqlDatabase" => "USE database",
+		"sqlDatabase" => "USE forum",
 		"SMTPUser" => "gmail_account",
 		"SMTPPassword" => "gmail_password",
 		"SMTPHost" => "smtp.gmail.com",

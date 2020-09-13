@@ -354,7 +354,7 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
 				mysqli_stmt_bind_param($stmt, "i", $_GET['id']);
 				mysqli_execute($stmt);
 				array_push($_SESSION['notification'], lang("editCategoryDeleteSuccesfully"));
-				header("Location: index.php"], true, 301);
+				header("Location: index.php", true, 301);
 				exit();
 			}
 			//Kategorian muokkaus
